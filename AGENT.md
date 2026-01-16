@@ -13,113 +13,32 @@ technical-analysis-mcp/
 ├── pyproject.toml              # Project configuration and dependencies
 ├── poetry.lock                 # Dependency lock file
 ├── src/                        # Source code
-│   ├── __init__.py             # Package initialization
-│   ├── models/                 # Data models
-│   │   └── __init__.py         # Models module initialization
-│   ├── server/                 # MCP server implementation
-│   │   ├── __init__.py         # Server module initialization
-│   │   └── mcp_server.py       # MCP server implementation
-│   └── tools/                  # Technical analysis tools
-│       ├── __init__.py         # Tools module initialization
-│       └── lookup_tool.py      # Lookup tool implementation
+│   └── technical_analysis_mcp/ # Main package
+│       ├── __init__.py         # Package initialization
+│       ├── server.py           # Server entry point
+│       ├── models/             # Data models
+│       │   └── __init__.py     # Models module initialization
+│       └── tools/              # Technical analysis tools
+│           └── __init__.py     # Tools module initialization
 └── tests/                      # Unit and integration tests
     ├── __init__.py             # Tests module initialization
-    ├── test_lookup_tool.py     # Lookup tool tests
     └── test_mcp_server.py      # MCP server tests
 ```
 
 ## Overview
 
-The MCP server provides tools for fetching market, sector, industry, and ticker
-data using `yfinance`. Agents can query these tools via the MCP protocol. The
-server is built using `FastMCP` and supports multiple transport mechanisms
-(stdio, HTTP, SSE).
+The MCP server is being developed to provide tools for fetching market, sector,
+industry, and ticker data using `yfinance`. The server is built using `FastMCP`
+and will support multiple transport mechanisms (stdio, HTTP, SSE) once the tools
+are implemented.
+
+Currently, the server provides the basic infrastructure and lifecycle management.
+Tools for technical analysis will be added in future updates.
 
 ## Supported Tools
 
-### 1. Lookup Tool
-
-**File**: `src/tools/lookup_tool.py`
-
-**Purpose**: Fetch ticker information such as symbol, name, and sector.
-
-**Example Query**:
-
-```json
-{
-  "tool": "lookup",
-  "query": "AAPL"
-}
-```
-
-**Response**:
-
-```json
-{
-  "symbol": "AAPL",
-  "name": "Apple Inc.",
-  "sector": "Technology"
-}
-```
-
-**Error Handling**:
-
-- If the ticker is invalid or empty, the tool raises a `ValueError`.
-- If no data is found for the ticker, the tool raises a `ValueError`.
-
-### 2. Market Tool (Planned)
-
-**Purpose**: Fetch market data (e.g., indices, trends).
-
-### 3. Sector Tool (Planned)
-
-**Purpose**: Fetch sector-specific data.
-
-### 4. Industry Tool (Planned)
-
-**Purpose**: Fetch industry-specific data.
-
-### 5. Calendars Tool (Planned)
-
-**Purpose**: Fetch calendar events (e.g., earnings, dividends).
-
-## Example Queries
-
-### Lookup Ticker
-
-```json
-{
-  "tool": "lookup",
-  "query": "AAPL"
-}
-```
-
-**Response**:
-
-```json
-{
-  "symbol": "AAPL",
-  "name": "Apple Inc.",
-  "sector": "Technology"
-}
-```
-
-### Invalid Ticker
-
-```json
-{
-  "tool": "lookup",
-  "query": ""
-}
-```
-
-**Response**:
-
-```json
-{
-  "error": "Ticker cannot be empty"
-}
-```
+The MCP server is currently being developed and will support various tools for
+technical analysis. The tools are planned for future implementation.
 
 ## Error Handling
 
@@ -137,23 +56,8 @@ server is built using `FastMCP` and supports multiple transport mechanisms
 ## Transport Mechanisms
 
 - **stdio**: Direct communication via standard input/output.
-- **HTTP**: RESTful API endpoints.
-- **SSE**: Server-Sent Events for real-time updates.
-
-## Authentication
-
-The MCP server supports API key authentication. Agents must include the API key
-in their requests.
-
-### Example Authenticated Request
-
-```json
-{
-  "tool": "lookup",
-  "query": "AAPL",
-  "api_key": "your-api-key"
-}
-```
+- **HTTP**: RESTful API endpoints (PLANNED).
+- **SSE**: Server-Sent Events for real-time updates (PLANNED).
 
 ## Best Practices
 
@@ -179,52 +83,53 @@ poetry run pytest
 To format the code, use the following command:
 
 ```bash
-poetry run ruff src tests
+poetry run ruff format src tests
 ```
+
+### Linting Code
+
+To check for linting issues, use the following command:
+
+```bash
+poetry run ruff check src tests
+```
+
+### Type Checking
+
+To run type checking with pyright, use the following command:
+
+```bash
+poetry run pyright
+```
+
+### Markdown Linting
+
+To check Markdown files for linting issues, use the following command:
+
+```bash
+poetry run pymarkdownlnt scan AGENT.md README.md
+```
+
+### Fixing All Issues
+
+To check for linting issues, and run type checking:
+
+```bash
+poetry run ruff check --fix src tests
+poetry run pyright
+poetry run pymarkdownlnt scan AGENT.md README.md
+```
+
+To ensures the code follows the project's style guidelines and passes all
+quality checks, detect the issues with this commands and iterate until fix all
+is needed.
 
 ### Starting the Server
 
 To start the MCP server, use the following command:
 
 ```bash
-poetry run technical-analysis-mcp
-```
-
-## Examples
-
-### Python Example
-
-```python
-import requests
-
-# Fetch ticker data
-response = requests.post(
-    "http://localhost:8000/query",
-    json={
-        "tool": "lookup",
-        "query": "AAPL"
-    }
-)
-
-print(response.json())
-```
-
-### JavaScript Example
-
-```javascript
-// Fetch ticker data
-fetch("http://localhost:8000/query", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    tool: "lookup",
-    query: "AAPL"
-  })
-})
-.then(response => response.json())
-.then(data => console.log(data));
+poetry run server
 ```
 
 ## Additional Notes
@@ -237,7 +142,7 @@ fetch("http://localhost:8000/query", {
 
 ## Future Enhancements
 
-- Implement additional tools (Market, Sector, Industry, Calendars).
+- Implement yfinance and technical-analysis tools.
 - Add more detailed error handling and logging.
 - Support for additional transport mechanisms.
 - Enhance documentation and examples.
