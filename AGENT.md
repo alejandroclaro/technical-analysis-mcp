@@ -70,12 +70,21 @@ technical analysis. The tools are planned for future implementation.
 
 ## Development
 
+### Setting Up the Environment
+
+To set up the development environment, use the following command:
+
+```bash
+uv sync
+uv pip install -e .
+```
+
 ### Running Tests
 
 To run the tests, use the following command:
 
 ```bash
-poetry run pytest
+uv run pytest
 ```
 
 ### Formatting Code
@@ -83,7 +92,7 @@ poetry run pytest
 To format the code, use the following command:
 
 ```bash
-poetry run ruff format src tests
+uv run ruff format src tests
 ```
 
 ### Linting Code
@@ -91,7 +100,7 @@ poetry run ruff format src tests
 To check for linting issues, use the following command:
 
 ```bash
-poetry run ruff check src tests
+uv run ruff check src tests
 ```
 
 ### Type Checking
@@ -99,7 +108,7 @@ poetry run ruff check src tests
 To run type checking with pyright, use the following command:
 
 ```bash
-poetry run pyright
+uv run pyright
 ```
 
 ### Markdown Linting
@@ -107,7 +116,7 @@ poetry run pyright
 To check Markdown files for linting issues, use the following command:
 
 ```bash
-poetry run pymarkdownlnt scan AGENT.md README.md
+uv run pymarkdownlnt scan AGENT.md README.md
 ```
 
 ### Fixing All Issues
@@ -115,9 +124,9 @@ poetry run pymarkdownlnt scan AGENT.md README.md
 To check for linting issues, and run type checking:
 
 ```bash
-poetry run ruff check --fix src tests
-poetry run pyright
-poetry run pymarkdownlnt scan AGENT.md README.md
+uv run ruff check --fix src tests
+uv run pyright
+uv run pymarkdownlnt scan AGENT.md README.md
 ```
 
 To ensures the code follows the project's style guidelines and passes all
@@ -129,7 +138,7 @@ is needed.
 To start the MCP server, use the following command:
 
 ```bash
-poetry run server
+uv run server
 ```
 
 ## Additional Notes

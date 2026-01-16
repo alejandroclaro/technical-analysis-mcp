@@ -1,3 +1,21 @@
+Metadata-Version: 2.4
+Name: technical-analysis-mcp
+Version: 0.1.0
+Summary: MCP server for technical analysis using yfinance
+Author-email: Alejandro Claro <alejandro.claro@gmail.com>
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: fastmcp>=2.14.3
+Requires-Dist: yfinance>=1.0
+Requires-Dist: pytest>=9.0.2
+Requires-Dist: pytest-asyncio>=1.3.0
+Requires-Dist: uvicorn>=0.40.0
+Requires-Dist: pymarkdownlnt>=0.9.34
+Provides-Extra: dev
+Requires-Dist: ruff>=0.14.13; extra == "dev"
+Requires-Dist: pyright>=1.1.408; extra == "dev"
+Requires-Dist: pymarkdownlnt>=0.9.34; extra == "dev"
+
 # Technical Analysis MCP
 
 A MCP (Modular Communication Protocol) server for providing technical analysis
