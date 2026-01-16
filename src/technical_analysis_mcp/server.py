@@ -4,7 +4,7 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from .tools import fetch_stock_info
+from .tools import fetch_ticker_information
 
 server = FastMCP("technical-analysis", dependencies=["yfinance>=1.0"])
 
@@ -20,7 +20,7 @@ async def get_ticker_info(ticker: str) -> dict[str, Any]:
         dict[strin, Any]: The ticker information.
 
     """
-    return await fetch_stock_info(ticker)
+    return await fetch_ticker_information(ticker)
 
 
 def main() -> None:

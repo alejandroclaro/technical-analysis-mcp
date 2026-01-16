@@ -1,7 +1,7 @@
 """Technical Analysis Tools Module."""
 
-from .fetch_ticker_info import fetch_stock_info
+from .fetch_ticker_information import fetch_ticker_information
 
 __all__ = [
-    "fetch_stock_info",
+    "fetch_ticker_information",
 ]

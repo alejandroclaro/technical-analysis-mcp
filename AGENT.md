@@ -133,6 +133,36 @@ To ensures the code follows the project's style guidelines and passes all
 quality checks, detect the issues with this commands and iterate until fix all
 is needed.
 
+### Commit Message Conventions
+
+Commit messages MUST follow the [Conventional
+Commits](https://www.conventionalcommits.org/) specification. This ensures
+consistency and clarity in the project's commit history.
+
+The format for commit messages is as follows:
+
+```text
+<type>(<scope>): <description>
+
+<body>
+
+<footer>
+```
+
+- **type**: The type of change (e.g., `feat`, `fix`, `docs`, `style`,
+`refactor`, `test`, `chore`).
+- **scope**: The scope of the change (e.g., `server`, `models`, `tools`).
+- **description**: A brief description of the change.
+- **body**: A detailed explanation of the change (optional).
+- **footer**: Any additional information, such as breaking changes or issue
+references (optional).
+
+#### Examples
+
+- `feat(server): add HTTP transport support`
+- `fix(models): resolve data validation issue`
+- `docs(README): update setup instructions`
+
 ### Starting the Server
 
 To start the MCP server, use the following command:

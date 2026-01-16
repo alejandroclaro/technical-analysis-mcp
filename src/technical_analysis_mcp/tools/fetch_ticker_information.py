@@ -5,7 +5,7 @@ from typing import Any
 import yfinance as yf
 
 
-async def fetch_stock_info(ticker: str) -> dict[str, Any]:
+async def fetch_ticker_information(ticker: str) -> dict[str, Any]:
     """Fetch comprehensive ticker information.
 
     Args:
