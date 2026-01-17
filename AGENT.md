@@ -40,19 +40,6 @@ Tools for technical analysis will be added in future updates.
 The MCP server is currently being developed and will support various tools for
 technical analysis. The tools are planned for future implementation.
 
-## Error Handling
-
-- If a tool fails, the server will respond with an error message.
-- Agents should handle retries or fallbacks gracefully.
-
-### Example Error Response
-
-```json
-{
-  "error": "Failed to fetch market data: Invalid ticker"
-}
-```
-
 ## Transport Mechanisms
 
 - **stdio**: Direct communication via standard input/output.
@@ -79,59 +66,45 @@ uv sync
 uv pip install -e .
 ```
 
+### Starting the Server
+
+To start the MCP server, use the following command:
+
+```bash
+uv run server
+```
+
 ### Running Tests
 
-To run the tests, use the following command:
+AI agents MUST run the unit tests after making changes to any source code
+file. No task is considered complete without ensuring that the code
+passes all tests.
 
 ```bash
 uv run pytest
 ```
 
-### Formatting Code
+### Linting and Formatting
 
-To format the code, use the following command:
+AI agents MUST run the linters and formatters after making changes to any
+file. No task is considered complete without ensuring that the code
+passes all linting and formatting checks.
+
+#### Commands to Run
 
 ```bash
+# Format code
 uv run ruff format src tests
-```
 
-### Linting Code
-
-To check for linting issues, use the following command:
-
-```bash
+# Run basic linting
 uv run ruff check src tests
-```
 
-### Type Checking
-
-To run type checking with pyright, use the following command:
-
-```bash
+# Run type checking
 uv run pyright
+
+# Run markdown linting
+uv run pymarkdownlnt scan *.md
 ```
-
-### Markdown Linting
-
-To check Markdown files for linting issues, use the following command:
-
-```bash
-uv run pymarkdownlnt scan AGENT.md README.md
-```
-
-### Fixing All Issues
-
-To check for linting issues, and run type checking:
-
-```bash
-uv run ruff check --fix src tests
-uv run pyright
-uv run pymarkdownlnt scan AGENT.md README.md
-```
-
-To ensures the code follows the project's style guidelines and passes all
-quality checks, detect the issues with this commands and iterate until fix all
-is needed.
 
 ### Commit Message Conventions
 
@@ -150,7 +123,7 @@ The format for commit messages is as follows:
 ```
 
 - **type**: The type of change (e.g., `feat`, `fix`, `docs`, `style`,
-`refactor`, `test`, `chore`).
+`refactor`, `test`, `chore`, `ci`).
 - **scope**: The scope of the change (e.g., `server`, `models`, `tools`).
 - **description**: A brief description of the change.
 - **body**: A detailed explanation of the change (optional).
@@ -161,27 +134,17 @@ references (optional).
 
 - `feat(server): add HTTP transport support`
 - `fix(models): resolve data validation issue`
-- `docs(README): update setup instructions`
+- `docs: update setup instructions`
 
-### Starting the Server
+## Error Handling
 
-To start the MCP server, use the following command:
+- If a tool fails, the server will respond with an error message.
+- Agents should handle retries or fallbacks gracefully.
 
-```bash
-uv run server
+### Example Error Response
+
+```json
+{
+  "error": "Failed to fetch market data: Invalid ticker"
+}
 ```
-
-## Additional Notes
-
-- The repository uses `Poetry` for dependency management. Ensure you have Poetry
-  installed and configured.
-- The project is licensed under the MIT License. See the `README.md` file for
-  more details.
-- Contributions are welcome! Please open an issue or submit a pull request.
-
-## Future Enhancements
-
-- Implement yfinance and technical-analysis tools.
-- Add more detailed error handling and logging.
-- Support for additional transport mechanisms.
-- Enhance documentation and examples.

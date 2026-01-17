@@ -27,14 +27,15 @@ async def fetch_ticker_information(ticker: str) -> dict[str, Any]:
     """
     try:
         result = yf.Ticker(ticker)
+        isin = result.get_isin()
 
-        if result.isin is None:
+        if (isin is None) or (isin == "-"):
             return {
                 "error": f"Company ticker {ticker} not found.",
             }
-    except Exception:  # noqa: BLE001
+    except ValueError as e:
         return {
-            "error": f"Error: getting stock information for {ticker}",
+            "error": f"Error: getting stock information for {ticker}: {e}",
         }
 
     return result.info
