@@ -11,9 +11,10 @@ dependencies = [
   "yfinance>=1.0",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
   "PyHamcrest>=2.1.0",
+  "conventional-commits-check>=2.9.0",
   "pymarkdownlnt>=0.9.34",
   "pymarkdownlnt>=0.9.34",
   "pyright>=1.1.408",
@@ -57,3 +58,4 @@ exclude = [
   "build",
   "dist"
 ]
+
