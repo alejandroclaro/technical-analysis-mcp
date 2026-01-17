@@ -1,31 +1,61 @@
-# Technical Analysis MCP
+# Technical Analysis MCP Server
 
-A MCP (Modular Communication Protocol) server for providing technical analysis
-tools to AI agents using `yfinance`.
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Python](https://img.shields.io/badge/python-3.12%2B-blue)
+![FastMCP](https://img.shields.io/badge/FastMCP-2.14.0-red)
 
-## Goals
+## Overview
 
-- Provide a modular and extensible MCP server for technical analysis.
-- Integrate with `yfinance` to fetch market, sector, industry, and ticker data.
-- Support multiple transport mechanisms (stdio, HTTP, SSE).
+The Technical Analysis MCP Server is a cutting-edge project designed to provide
+powerful tools for fetching and computing technical-analysis data for stocks
+and cryptocurrencies.
 
-## Structure
+## Purpose
 
-```text
-src/
-├── server/  # MCP server implementation
-├── tools/   # Technical analysis tools
-└── models/  # Data models
+Unlike other MCPs and costly services like Alpha Vantage, this project offers a
+complete and robust solution that leverages free sources of information and
+mathematical calculations to provide top-notch tools and functions without the
+hefty price tag.
 
-tests/       # Unit and integration tests
-```
+It doesn't stop there. This project includes a cache and local database to
+store previously fetched data, ensuring lightning-fast access to information
+without repeated internet requests. This means you get the data you need, when
+you need it, without the wait or hiting rate limits.
 
-## Installation
+And that's not all. We're also incorporating non-technical indicators like
+sentiment and other signals derived from free sources of information, giving
+you a comprehensive view of the market landscape.
+
+## Features
+
+- **Comprehensive Data Fetching**: Retrieve detailed financial, and real-time
+  descriptive information for specific financial instruments or companies.
+- **Local Database and Cache**: Store previously fetched data locally to avoid
+  repeated internet requests.
+- **Modular Design**: Organized into modular tools.
+- **Structured Data**: Uses structured responses to improve predectivility and
+  processing by LLMs.
+- **Error Handling**: Errors are returned as structured objects rather than
+  raising exceptions.
+- **Type Hints**: Extensive use of type hints for better LLMs "undertanding"
+  and processing.
+- **Input Validation**: Validates inputs before processing and handles edge
+  cases gracefully.
+- **Sentiment and Signal Analysis**: Incorporate non-technical indicators like
+  sentiment and other signals derived from free sources of information.
+
+## Development
+
+### Installation
+
+Getting started with the Technical Analysis MCP Server is a breeze. Just follow
+these simple steps:
 
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/yourusername/technical-analysis-mcp.git
    cd technical-analysis-mcp
    ```
 
@@ -33,92 +63,75 @@ tests/       # Unit and integration tests
 
    ```bash
    uv sync
+   uv pip install -e .
    ```
 
-## Usage
+### Running Tests
 
-1. Start the MCP server:
+To run the unit tests, use the following command:
 
-   ```bash
-   uv run server
-   ```
-
-2. Interact with the server using an MCP client or AI agent.
-
-### Example Queries
-
-#### Market Data
-
-```json
-{
-  "tool": "market",
-  "query": "^GSPC"
-}
+```bash
+uv run pytest
 ```
 
-#### Sector Data
+### Linting and Formatting
 
-```json
-{
-  "tool": "sector",
-  "query": "XLC"
-}
+```bash
+# To run basic linting, use:
+uv run ruff check
+
+#To run type checking, use:
+uv run pyright
+
+#To run markdown linting, use:
+uv run pymarkdownlnt scan .
 ```
-
-#### Industry Data
-
-```json
-{
-  "tool": "industry",
-  "query": "AAPL"
-}
-```
-
-#### Calendar Events
-
-```json
-{
-  "tool": "calendars",
-  "query": "AAPL"
-}
-```
-
-#### Ticker Lookup
-
-```json
-{
-  "tool": "lookup",
-  "query": "AAPL"
-}
-```
-
-## Authentication
-
-The MCP server supports API key authentication. To enable authentication, pass
-an API key when initializing the server:
-
-```python
-server = TechnicalAnalysisMCPServer(api_key="your-api-key")
-```
-
-## Development
-
-- Run tests:
-
-  ```bash
-  uv run pytest
-  ```
-
-- Format code:
-
-  ```bash
-  uv run ruff format src tests
-  ```
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request.
+We welcome contributions to the Technical Analysis MCP Server! Whether you're a
+seasoned developer or just starting out, your help is appreciated. Please
+follow these guidelines:
+
+1. **Fork the repository** and create a new branch for your feature or bug fix.
+2. **Commit your changes** with clear and concise commit messages following the
+   [Conventional Commits](https://www.conventionalcommits.org/) specification.
+3. **Push your changes** to your fork and submit a pull request.
+4. Commit messages MUST follow the [Conventional
+   Commits](https://www.conventionalcommits.org/) specification. This ensures
+   consistency and clarity in the project's commit history.
+
+## Support
+
+For support, please open an issue on the GitHub repository or contact the
+maintainers directly. We're here to help!
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file
+for more details.
+
+## Acknowledgments
+
+A big thank you to all the contributors and supporters of this project. Your
+help and feedback are invaluable!
+
+## FAQ
+
+### What makes this project different from other MCPs?
+
+Our project stands out by offering a complete and robust solution that
+leverages free sources of information and mathematical calculations to provide
+top-notch tools and functions without the hefty price tag. Additionally, we
+include a cache and local database to store previously fetched data, ensuring
+lightning-fast access to information without repeated internet requests.
+
+### How can I contribute to the project?
+
+We welcome contributions from everyone! Please follow the guidelines outlined
+in the Contributing section to get started.
+
+### Where can I get help if I have issues or questions?
+
+For support, please open an issue on the GitHub repository or contact the
+maintainers directly. We're here to help!
