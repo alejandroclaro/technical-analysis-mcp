@@ -2,29 +2,31 @@
 name = "technical-analysis-mcp"
 version = "0.1.0"
 description = "MCP server for technical analysis using yfinance"
-authors = [{ name = "Alejandro Claro", email = "alejandro.claro@gmail.com" }]
+authors = [{ name = "Alejandro Claro" }]
 readme = "README.md"
 requires-python = ">=3.12"
 
 dependencies = [
   "fastmcp>=2.14.3",
   "yfinance>=1.0",
-  "pytest>=9.0.2",
-  "pytest-asyncio>=1.3.0",
-  "uvicorn>=0.40.0",
-  "pymarkdownlnt>=0.9.34",
-  "PyHamcrest>=2.1.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "ruff>=0.14.13",
-  "pyright>=1.1.408",
+  "PyHamcrest>=2.1.0",
   "pymarkdownlnt>=0.9.34",
+  "pymarkdownlnt>=0.9.34",
+  "pyright>=1.1.408",
+  "pytest-asyncio>=1.3.0",
+  "pytest>=9.0.2",
+  "ruff>=0.14.13",
 ]
 
 [project.scripts]
 server = "technical_analysis_mcp.server:main"
+
+[tool.pytest]
+pythonpath = ["src"]
 
 [tool.pyright]
 venvPath = "."
@@ -41,6 +43,12 @@ exclude = [
 [tool.ruff]
 line-length = 120
 select = ["ALL"]
+
+include = [
+  "pyproject.toml",
+  "src/**/*.py",
+  "tests/**/*.py"
+]
 
 exclude = [
   ".git",

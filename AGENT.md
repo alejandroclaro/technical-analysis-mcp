@@ -1,8 +1,18 @@
 # Agent Interaction Guide
 
-This document outlines how AI agents can interact with the Technical Analysis
-MCP server. It provides detailed information about the repository structure,
-available tools, and best practices for working with the codebase.
+This document outlines how AI agents can interact with the Technical
+Analysis MCP server. It provides detailed information about the
+repository structure, available tools, and best practices for working
+with the codebase.
+
+## AGENT.md updates
+
+You MUST keep AGENT.md file up to date after every task completed. This
+file is for you and AI agents to understand the structure of the
+repository, the conventions, the goals, and the development plan.
+
+You are autorized to use @{full_stack_dev} tools group to perform the actions
+in this repository.
 
 ## Repository Structure
 
@@ -17,43 +27,70 @@ technical-analysis-mcp/
 │       ├── __init__.py         # Package initialization
 │       ├── server.py           # Server entry point
 │       ├── models/             # Data models
-│       │   └── __init__.py     # Models module initialization
-│       └── tools/              # Technical analysis tools
-│           └── __init__.py     # Tools module initialization
+│       │   ├── __init__.py     # Models module initialization
+│       │   ├── error.py        # Error model
+│       │   └── ticker_information.py  # Ticker information model
+│       ├── tools/              # Technical analysis tools
+│       │   ├── __init__.py     # Tools module initialization
+│       │   └── fetch_ticker_information.py  # Ticker information tool
+│       └── utils/              # Utility functions
+│           ├── __init__.py     # Utils module initialization
+│           └── parsing.py      # Parsing utilities
 └── tests/                      # Unit and integration tests
     ├── __init__.py             # Tests module initialization
-    └── test_mcp_server.py      # MCP server tests
+    ├── test_fetch_ticker_information.py  # Ticker information tests
+    ├── test_server.py          # MCP server tests
+    ├── test_ticker_information.py  # Ticker information model tests
+    └── test_utils_parsing.py   # Parsing utilities tests
 ```
 
 ## Overview
 
-The MCP server is being developed to provide tools for fetching market, sector,
-industry, and ticker data using `yfinance`. The server is built using `FastMCP`
-and will support multiple transport mechanisms (stdio, HTTP, SSE) once the tools
-are implemented.
-
-Currently, the server provides the basic infrastructure and lifecycle management.
-Tools for technical analysis will be added in future updates.
+The MCP server is being developed to provide tools for fetching market,
+sector, industry, and ticker data using `yfinance`. The server is built
+using `FastMCP` and currently supports the `stdio` transport mechanism.
+Additional transport mechanisms (HTTP, SSE) are planned for future
+implementation.
 
 ## Supported Tools
 
-The MCP server is currently being developed and will support various tools for
-technical analysis. The tools are planned for future implementation.
+The MCP server currently supports the following tools for technical
+analysis:
+
+- **`get_ticker_information`**: Retrieves detailed financial, metadata,
+  and real-time descriptive information for a specific financial instrument
+  or company.
+      - **Use Case**: Identify a company's sector, industry, business
+        summary, market cap, or verify if a ticker symbol is valid.
+      - **Input**: A ticker symbol (e.g., `"AAPL"`, `"TSLA"`, `"^GSPC"`,
+       `"BTC/USD"`).
+      - **Output**: A structured object containing comprehensive asset
+        details or an error if the ticker is not found.
 
 ## Transport Mechanisms
 
-- **stdio**: Direct communication via standard input/output.
-- **HTTP**: RESTful API endpoints (PLANNED).
-- **SSE**: Server-Sent Events for real-time updates (PLANNED).
+- **stdio**: Direct communication via standard input/output (CURRENTLY
+  SUPPORTED).
 
 ## Best Practices
 
-1. **Input Validation**: Always validate inputs before sending them to the
-   server.
-2. **Error Handling**: Handle errors gracefully and provide meaningful feedback
-   to users.
-3. **Rate Limiting**: Be mindful of rate limits when making multiple requests.
-4. **Caching**: Cache responses to avoid redundant requests.
+1. **Modular Design**: The project is organized into modular components
+   (e.g., `models`, `tools`, `utils`) for better maintainability and
+   scalability.
+2. **Structured Data**: Use `pydantic.BaseModel` for defining structured
+   data models (e.g., `TickerInformation`, `Error`).
+3. **Async/Await**: Tools are implemented as async functions to ensure
+   non-blocking operations.
+4. **Error Handling**: Errors are returned as structured objects (e.g.,
+   `Error` model) rather than raising exceptions.
+5. **Type Hints**: Use type hints extensively for better code clarity and
+   maintainability.
+6. **Docstrings**: Follow Google-style docstrings for functions and
+   classes to ensure clear and consistent documentation.
+7. **Input Validation**: Validate inputs before processing and handle
+   edge cases gracefully.
+8. **Testing**: Write unit tests for all tools, models, and utilities to
+   ensure correctness and reliability.
 
 ## Development
 
@@ -76,7 +113,7 @@ uv run server
 
 ### Running Tests
 
-AI agents MUST run the unit tests after making changes to any source code
+You MUST run the unit tests after making changes to any source code
 file. No task is considered complete without ensuring that the code
 passes all tests.
 
@@ -86,7 +123,7 @@ uv run pytest
 
 ### Linting and Formatting
 
-AI agents MUST run the linters and formatters after making changes to any
+You MUST run the linters and formatters after making changes to any
 file. No task is considered complete without ensuring that the code
 passes all linting and formatting checks.
 
@@ -94,16 +131,16 @@ passes all linting and formatting checks.
 
 ```bash
 # Format code
-uv run ruff format src tests
+uv run ruff format
 
 # Run basic linting
-uv run ruff check src tests
+uv run ruff check
 
 # Run type checking
 uv run pyright
 
 # Run markdown linting
-uv run pymarkdownlnt scan *.md
+uv run pymarkdownlnt scan .
 ```
 
 ### Commit Message Conventions
@@ -132,19 +169,7 @@ references (optional).
 
 #### Examples
 
-- `feat(server): add HTTP transport support`
-- `fix(models): resolve data validation issue`
-- `docs: update setup instructions`
-
-## Error Handling
-
-- If a tool fails, the server will respond with an error message.
-- Agents should handle retries or fallbacks gracefully.
-
-### Example Error Response
-
-```json
-{
-  "error": "Failed to fetch market data: Invalid ticker"
-}
-```
+- `feat(tools): add fetch_ticker_information tool`
+- `fix(models): resolve data validation issue in TickerInformation`
+- `docs: update AGENT.md with accurate tooling information`
+- `refactor(server): improve error handling in FastMCP`

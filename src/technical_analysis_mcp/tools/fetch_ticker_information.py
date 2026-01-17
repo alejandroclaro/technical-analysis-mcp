@@ -1,41 +1,33 @@
 """Ticker information tools."""
 
-from typing import Any
-
 import yfinance as yf
 
+from technical_analysis_mcp.models import (
+    Error,
+    TickerInformation,
+    parse_yfinance_ticker_information,
+)
 
-async def fetch_ticker_information(ticker: str) -> dict[str, Any]:
+
+async def fetch_ticker_information(ticker: str) -> TickerInformation | Error:
     """Fetch comprehensive ticker information.
 
     Args:
         ticker: The ticker symbol (e.g., 'AAPL', 'MSFT', 'GOOGL')
 
     Returns:
-        - Stock Price & Trading Information,
-        - Company Information,
-        - Financial Metrics,
-        - Earnings & Revenue,
-        - Margins & Returns,
-        - Dividends,
-        - Balance Sheet,
-        - Ownership,
-        - Analyst Coverage,
-        - Risk Metrics,
-        - Other.
+        The ticker basic information in a structured format.
 
     """
     try:
-        result = yf.Ticker(ticker)
-        isin = result.get_isin()
+        information = yf.Ticker(ticker)
+        isin = information.get_isin()
 
         if (isin is None) or (isin == "-"):
-            return {
-                "error": f"Company ticker {ticker} not found.",
-            }
-    except ValueError as e:
-        return {
-            "error": f"Error: getting stock information for {ticker}: {e}",
-        }
+            return Error(reason=f"Company ticker {ticker} not found.")
 
-    return result.info
+        result = parse_yfinance_ticker_information(information.info)
+    except (ValueError, TypeError) as e:
+        return Error(reason=f"Error: getting stock information for {ticker}: {e}")
+
+    return result
