@@ -1,1 +1,1 @@
-# Tools test package
+"""Tools test module."""

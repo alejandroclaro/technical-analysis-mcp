@@ -1,1 +1,1 @@
-# Utils test package
+"""Helpers test module."""

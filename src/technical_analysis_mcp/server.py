@@ -1,7 +1,9 @@
 """MCP server entry point."""
 
+from fastmcp.utilities.logging import get_logger
 from mcp.server.fastmcp import FastMCP
 
+from . import __version__
 from .models import Error, TickerInformation
 from .tools import fetch_ticker_information
 
@@ -36,6 +38,8 @@ async def get_ticker_information(ticker: str) -> TickerInformation | Error:
 
 def main() -> None:
     """Entry point for the server."""
+    logger = get_logger("fastmcp")
+    logger.info("Starting technical analysis MCP Server v%s", __version__)
     server.run(transport="stdio")
 
 

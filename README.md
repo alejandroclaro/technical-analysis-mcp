@@ -1,4 +1,4 @@
-# Technical Analysis MCP Server
+# Technical analysis MCP server
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
@@ -45,6 +45,42 @@ you a comprehensive view of the market landscape.
 - **Sentiment and Signal Analysis**: Incorporate non-technical indicators like
   sentiment and other signals derived from free sources of information.
 
+## Usage
+
+You can use this MCP server in your client via uv, or local
+development.
+
+### Via uv
+
+```json
+{
+  "mcpServers": {
+    "technical-analysis": {
+      "command": "uvx",
+      "args": ["technical-analysis-mcp"]
+    }
+  }
+}
+```
+
+### Local development
+
+```json
+{
+  "mcpServers": {
+    "Technical-analysis": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/path/to/Technical-analysis-mcp",
+        "server"
+      ]
+    }
+  }
+}
+```
+
 ## Development
 
 ### Installation
@@ -80,10 +116,10 @@ uv run pytest
 # To run basic linting, use:
 uv run ruff check
 
-#To run type checking, use:
+# To run type checking, use:
 uv run pyright
 
-#To run markdown linting, use:
+# To run markdown linting, use:
 uv run pymarkdownlnt scan .
 ```
 

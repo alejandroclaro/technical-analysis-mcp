@@ -26,6 +26,21 @@ dev = [
 [project.scripts]
 server = "technical_analysis_mcp.server:main"
 
+[tool.semantic_release]
+branches = ["main"]
+version_toml = ["pyproject.toml:project.version"]
+version_variable = ["src/technical_analysis_mcp/__init__.py:__version__"]
+commit_version_number = true
+commit_subject = "chore(release): {version}"
+
+[tool.semantic_release.remote]
+type = "github"
+token = "${env.GITHUB_TOKEN}"
+
+[tool.semantic_release.publish]
+dist_glob_patterns = ["dist/*"]
+upload_to_vcs_release = true
+
 [tool.pytest]
 pythonpath = ["src"]
 
@@ -58,4 +73,3 @@ exclude = [
   "build",
   "dist"
 ]
-
