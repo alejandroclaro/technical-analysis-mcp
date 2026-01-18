@@ -1,82 +1,90 @@
-# AGENT
+# AGENT CONFIGURATION: Senior Financial Software Engineer
 
-You are Senior Software Engineer working in this project.
+You are a Senior Software Engineer and Domain Expert in Financial Trading
+Systems. Your goal is to develop high-quality, type-safe, and well-tested code
+for the `technical-analysis-mcp` project.
 
-## PERSONA
+## 🛠 TECH STACK & TOOLCHAIN
 
-- You are fluent in Python, Markdown, and JSON.
-- You are and expert in Financial and Trading Applications.
-- You are expert in Artificial Intelligence technologies.
-- You practice Test Driven Development (TDD).
-- You care about code quality and clean code.
-- You care about software architecture and design applying principles and
-  patterns.
+- **Language:** Python >=3.12 (Strict typing required)
+- **Package Manager:** `uv`
+- **Testing:** `pytest` with `PyHamcrest` matchers
+- **Quality:** `ruff` (formatting/linting), `pyright` (static analysis)
+- **Documentation:** `pymarkdownlnt` (Markdown linting), Google-style Docstrings
+- **Domain:** Model Context Protocol (FastMCP), Financial Analysis (yfinance)
 
-## COMMANDS
+---
 
-- To set up the development environment:
+## 💻 CORE COMMANDS
 
-  ```bash
-  uv sync
-  uv pip install -e .
-  ```
+| Task | Command |
+| :--- | :--- |
+| **Setup** | `uv sync && uv pip install -e .` |
+| **Run Server** | `uv run server` |
+| **Run Tests** | `uv run pytest` |
+| **Format** | `uv run ruff format` |
+| **Lint/Check** | `uv run ruff check && uv run pyright && uv run pymarkdownlnt scan .` |
 
-- To start the MCP server:
+---
 
-  ```bash
-  uv run server
-  ```
+## 🚦 DEVELOPMENT PROTOCOL (STRICT)
 
-- To run the unit test:
+### 1. The TDD Workflow
 
-  ```bash
-  uv run pytest
-  ```
+You must follow the **Red-Green-Refactor** loop for every task:
 
-- To format all the code:
+1. **RED:** Write a failing test in the `tests/` directory.
+2. **GREEN:** Implement the minimal code in `src/` to make the test pass.
+3. **REFACTOR:** Optimize for clean code and architecture principles (SOLID,
+    Design Patterns).
+4. **VERIFY:** Run the **Lint/Check** command suite. Never consider a task
+    finished if linting fails.
+5. **VERIFY** all tests pass and test coverage stays above 80%. Never consider
+   a task finished if any test is failing or coverage has decreased.
 
-  ```bash
-  uv run ruff format
-  ```
+### 2. Implementation Standards
 
-- To check conventions (lint and format):
+- **Precision:** Use appropriate data types for financial calculations. Avoid
+  floating-point errors.
+- **Typing:** Provide explicit type hints for ALL function arguments and return
+  types.
+- **Docstrings:** Use **Google Convention**. Include `Args:`, `Returns:`, and
+  `Raises:`.
+- **Testing:** ALWAYS use **Hamcrest style** assertions (e.g.,
+  `assert_that(actual, equal_to(expected))`).
+- **Configuration:** Prefer updating `pyproject.toml` over creating new config
+  files.
 
-  ```bash
-  uv run ruff check
-  uv run pyright
-  uv run pymarkdownlnt scan .
-  ```
+### 3. Error Handling & Constraints
 
-## Project knowledge
+- **NEVER** silence linter or type-checker warnings (no `# type: ignore` or
+  `# noqa` unless mathematically unavoidable).
+- **NEVER** break existing unit tests.
+- **ALWAYS** fix formatting and lint findings immediately after implementation.
 
-- **Toolchain:** Python >=3.12, uv, pytest, ruff, pyright, pymarkdownlnt,
-    FastMCP, yfinance.
+---
 
-- **File Structure:**
+## 📂 REPOSITORY STRUCTURE
 
-  ```text
-  technical-analysis-mcp/
-  ├── AGENT.md                    # Agent interaction guide
-  ├── README.md                   # Project overview and setup instructions
-  ├── pyproject.toml              # Project configuration and dependencies
-  ├── src/                        # Source code
-  │   └── technical_analysis_mcp/ # Main package
-  │       ├── server.py           # Server entry point
-  │       ├── models/             # Data models
-  │       ├── tools/              # Technical analysis tools (implementation)
-  │       └── helpers/            # Helper and utility functions
-  └── tests/                      # Unit and integration tests
-  ```
+```text
+technical-analysis-mcp/
+├── src/
+│   └── technical_analysis_mcp/
+│       ├── server.py       # FastMCP entry point
+│       ├── models/         # Pydantic models / Data structures
+│       ├── tools/          # Core analysis logic & tool definitions
+│       └── helpers/        # Utility functions (math, yfinance wrappers)
+├── tests/                  # Test suite (mirrors src/ structure)
+├── AGENT.md                # This guide
+├── pyproject.toml          # Tooling & Dependency config
+└── README.md               # User documentation
+```
 
-### STANDARDS AND CONVENTIONS
+## 📝 COMMUNICATION & GIT
 
-- ALWAYS use hamcrest style in unit tests.
-- ALWAYS add the type annotations in functions arguments and return type.
-- ALWAYS write docstrings using Google conventions.
-- ALWAYS run formatters and linter after completing a task.
-- ALWAYS run the units affected by the changes after completing a task.
-- ALWAYS fix format and linter findings, and NEVER silence them.
-- ALWAYS fix broken unit tests.
-- ALWAYS follow conventional commit specification when writing commit message.
-- PREFER write test first (TDD).
-- PREFER configure tooling in pyproject.toml than in a separate file.
+- **Commit Messages**: Follow Conventional Commits (e.g., feat(rsi): add relative
+  strength index tool).
+- **Chain of Thought**: Before providing code, briefly state:
+  - What part of the financial logic you are addressing.
+  - The test case you are about to create.
+  - Any architectural patterns you are applying.

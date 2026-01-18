@@ -3,52 +3,61 @@ name: CI
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  pull_request: ~
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
 
 jobs:
   lint:
-    name: Lint
+    name: Code quality
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout 📋
+        uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 🚧
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install uv
+      - name: Install uv 🚧
         run: pip install uv
 
-      - name: Install dependencies
+      - name: Install dependencies 🚧
         run: uv sync --dev
 
-      - name: Run ruff
-        run: uv run ruff check
-
-      - name: Run pyright
-        run: uv run pyright
-
-      - name: Run pymarkdownlnt
-        run: uv run pymarkdownlnt scan .
+      - name: Check code quality 🖌️
+        run: >-
+          uv run ruff check
+          uv run pyright
+          uv run pymarkdownlnt scan .
 
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout 📋
+        uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 🚧
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install uv
+      - name: Install uv 🚧
         run: pip install uv
 
-      - name: Install dependencies
+      - name: Install dependencies 🚧
         run: uv sync --dev
 
-      - name: Run pytest
+      - name: Run tests 🧪
         run: uv run pytest
+
+      - name: Upload coverage report 📤
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: true

@@ -17,3 +17,7 @@ __pycache__/
 # Misc
 .DS_Store
 *.swp
+
+# Auto generated
+.converage
+reports/

@@ -1,9 +1,11 @@
 # Technical analysis MCP server
 
-![CI](https://github.com/alejandroclaro/technical-analysis-mcp/actions/workflows/ci.yml/badge.svg)
+[![CI](https://github.com/alejandroclaro/technical-analysis-mcp/actions/workflows/ci.yml/badge.svg?color=c678dd&logoColor=e06c75&style=for-the-badge)](https://github.com/alejandroclaro/technical-analysis-mcp/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/alejandroclaro/technical-analysis-mcp?color=c678dd&logoColor=e06c75&style=for-the-badge)](https://app.codecov.io/gh/alejandroclaro/technical-analysis-mcp)
+[![Stars](https://img.shields.io/github/stars/alejandroclaro/technical-analysis-mcp?color=c678dd&logoColor=e06c75&style=for-the-badge)](https://github.com/alejandroclaro/technical-analysis-mcp/stargazers)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Python](https://img.shields.io/badge/python-3.12%2B-blue)
-![FastMCP](https://img.shields.io/badge/FastMCP-2.14.0-red)
+![FastMCP](https://img.shields.io/badge/FastMCP-2.14.0-blue)
 
 ## Overview
 
@@ -27,7 +29,7 @@ And that's not all. We're also incorporating non-technical indicators like
 sentiment and other signals derived from free sources of information, giving
 you a comprehensive view of the market landscape.
 
-## Features
+## :sparkles: Features
 
 - **Comprehensive Data Fetching**: Retrieve detailed financial, and real-time
   descriptive information for specific financial instruments or companies.
@@ -45,7 +47,7 @@ you a comprehensive view of the market landscape.
 - **Sentiment and Signal Analysis**: Incorporate non-technical indicators like
   sentiment and other signals derived from free sources of information.
 
-## Usage
+## :rocket: Getting started
 
 You can use this MCP server in your client via uv, or local
 development.
@@ -81,7 +83,7 @@ development.
 }
 ```
 
-## Development
+## :hammer: Development
 
 ### Installation
 
@@ -110,6 +112,14 @@ To run the unit tests, use the following command:
 uv run pytest
 ```
 
+To run tests with coverage, use:
+
+```bash
+uv run pytest --cov=src/technical_analysis_mcp --cov-report=markdown
+```
+
+This will generate a coverage report in Markdown format and display it in the terminal.
+
 ### Linting and Formatting
 
 ```bash
@@ -123,7 +133,7 @@ uv run pyright
 uv run pymarkdownlnt scan .
 ```
 
-## Contributing
+## :gift: Contributing
 
 We welcome contributions to the Technical Analysis MCP Server! Whether you're a
 seasoned developer or just starting out, your help is appreciated. Please
@@ -137,22 +147,17 @@ follow these guidelines:
    Commits](https://www.conventionalcommits.org/) specification. This ensures
    consistency and clarity in the project's commit history.
 
-## Support
+## :speech_balloon: Support
 
 For support, please open an issue on the GitHub repository or contact the
 maintainers directly. We're here to help!
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file
-for more details.
-
-## Acknowledgments
+## :clap: Acknowledgments
 
 A big thank you to all the contributors and supporters of this project. Your
 help and feedback are invaluable!
 
-## FAQ
+## :question: FAQ
 
 ### What makes this project different from other MCPs?
 

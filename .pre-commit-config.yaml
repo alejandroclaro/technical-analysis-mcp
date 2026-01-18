@@ -1,3 +1,5 @@
+fail_fast: false
+
 repos:
   - repo: https://github.com/AliYmn/conventional-commits-check
     rev: v2.9.0
@@ -5,3 +7,15 @@ repos:
       - id: conventional-commits-check
         stages: [commit-msg]
         args: []
+
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.24.1
+    hooks:
+      - id: validate-pyproject
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.10
+    hooks:
+      - id: ruff-check
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
