@@ -1,11 +1,10 @@
 # Technical analysis MCP server
 
-[![CI](https://github.com/alejandroclaro/technical-analysis-mcp/actions/workflows/ci.yml/badge.svg?color=c678dd&logoColor=e06c75&style=for-the-badge)](https://github.com/alejandroclaro/technical-analysis-mcp/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/codecov/c/github/alejandroclaro/technical-analysis-mcp?color=c678dd&logoColor=e06c75&style=for-the-badge)](https://app.codecov.io/gh/alejandroclaro/technical-analysis-mcp)
-[![Stars](https://img.shields.io/github/stars/alejandroclaro/technical-analysis-mcp?color=c678dd&logoColor=e06c75&style=for-the-badge)](https://github.com/alejandroclaro/technical-analysis-mcp/stargazers)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Python](https://img.shields.io/badge/python-3.12%2B-blue)
-![FastMCP](https://img.shields.io/badge/FastMCP-2.14.0-blue)
+[![CI](https://img.shields.io/github/actions/workflow/status/alejandroclaro/technical-analysis-mcp/ci.yml?logo=github&style=flat-square)](https://github.com/alejandroclaro/technical-analysis-mcp/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/alejandroclaro/technical-analysis-mcp?style=flat-square)](https://app.codecov.io/gh/alejandroclaro/technical-analysis-mcp)
+![Python](https://img.shields.io/badge/python-3.12%2B-007ec6?style=flat-square)
+[![Stars](https://img.shields.io/github/stars/alejandroclaro/technical-analysis-mcp?color=007ec6&style=flat-square)](https://github.com/alejandroclaro/technical-analysis-mcp/stargazers)
+![License](https://img.shields.io/badge/license-MIT-007ec6?style=flat-square)
 
 ## Overview
 

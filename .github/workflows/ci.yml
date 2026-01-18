@@ -29,7 +29,7 @@ jobs:
         run: uv sync --dev
 
       - name: Check code quality 🖌️
-        run: >-
+        run: |
           uv run ruff check
           uv run pyright
           uv run pymarkdownlnt scan .

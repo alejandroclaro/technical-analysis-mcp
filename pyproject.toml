@@ -44,7 +44,7 @@ upload_to_vcs_release = true
 
 [tool.pytest]
 pythonpath = ["src"]
-addopts = ["--cov", "--cov-report=term", "--cov-report=xml", "--cov-report=json"]
+addopts = ["--cov", "--cov-report=term", "--cov-report=xml"]
 
 [tool.coverage.run]
 source = ["src"]
@@ -55,10 +55,6 @@ branch = true
 show_missing = true
 skip_covered = false
 fail_under = 80
-
-[tool.coverage.json]
-output = "reports/coverage.json"
-pretty_print = true
 
 [tool.coverage.xml]
 output = "reports/coverage.xml"
@@ -78,7 +74,6 @@ exclude = [
 
 [tool.ruff]
 line-length = 120
-select = ["ALL"]
 
 include = [
   "pyproject.toml",
@@ -94,3 +89,15 @@ exclude = [
   "dist"
 ]
 
+[tool.ruff.lint]
+select = ["ALL"]
+
+ignore = [
+  "COM812",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
