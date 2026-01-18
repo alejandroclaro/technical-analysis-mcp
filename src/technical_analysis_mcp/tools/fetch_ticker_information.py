@@ -24,10 +24,10 @@ async def fetch_ticker_information(ticker: str) -> TickerInformation | Error:
         isin = information.get_isin()
 
         if (isin is None) or (isin == "-"):
-            return Error(reason=f"Company ticker {ticker} not found.")
+            return Error(what=f"Company ticker {ticker} not found.")
 
         result = parse_yfinance_ticker_information(information.info)
     except (ValueError, TypeError) as e:
-        return Error(reason=f"Error: getting stock information for {ticker}: {e}")
+        return Error(what=f"Error: getting stock information for {ticker}: {e}")
 
     return result

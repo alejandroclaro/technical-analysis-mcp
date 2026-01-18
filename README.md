@@ -142,9 +142,6 @@ follow these guidelines:
 2. **Commit your changes** with clear and concise commit messages following the
    [Conventional Commits](https://www.conventionalcommits.org/) specification.
 3. **Push your changes** to your fork and submit a pull request.
-4. Commit messages MUST follow the [Conventional
-   Commits](https://www.conventionalcommits.org/) specification. This ensures
-   consistency and clarity in the project's commit history.
 
 ## :speech_balloon: Support
 

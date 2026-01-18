@@ -4,10 +4,15 @@ from fastmcp.utilities.logging import get_logger
 from mcp.server.fastmcp import FastMCP
 
 from . import __version__
+from .instructions import INSTRUCTIONS
 from .models import Error, TickerInformation
 from .tools import fetch_ticker_information
 
-server = FastMCP("technical-analysis", dependencies=["yfinance>=1.0"])
+server = FastMCP(
+    "technical-analysis",
+    dependencies=["yfinance>=1.0"],
+    instructions=INSTRUCTIONS,
+)
 
 
 @server.tool(structured_output=True)

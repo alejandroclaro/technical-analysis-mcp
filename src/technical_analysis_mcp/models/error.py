@@ -6,4 +6,4 @@ from pydantic import BaseModel
 class Error(BaseModel):
     """Structured model for error responses."""
 
-    reason: str
+    what: str

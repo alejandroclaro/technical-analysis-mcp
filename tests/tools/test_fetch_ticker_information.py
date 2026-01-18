@@ -29,5 +29,5 @@ async def test_fetch_ticker_information_failure() -> None:
     assert_that(result, is_(instance_of(Error)))
 
     if isinstance(result, Error):
-        assert_that(result.reason, is_(str))
-        assert_that(result.reason, is_(not_(empty())))
+        assert_that(result.what, is_(str))
+        assert_that(result.what, is_(not_(empty())))
