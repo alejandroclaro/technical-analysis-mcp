@@ -6,13 +6,13 @@
 [![Stars](https://img.shields.io/github/stars/alejandroclaro/technical-analysis-mcp?color=007ec6&style=flat-square)](https://github.com/alejandroclaro/technical-analysis-mcp/stargazers)
 ![License](https://img.shields.io/badge/license-MIT-007ec6?style=flat-square)
 
-## Overview
+## :telescope: Overview
 
 The Technical Analysis MCP Server is a cutting-edge project designed to provide
 powerful tools for fetching and computing technical-analysis data for stocks
 and cryptocurrencies.
 
-## Purpose
+## :pushpin: Purpose
 
 Unlike other MCPs and costly services like Alpha Vantage, this project offers a
 complete and robust solution that leverages free sources of information and
@@ -129,7 +129,7 @@ uv run ruff check
 uv run pyright
 
 # To run markdown linting, use:
-uv run pymarkdownlnt scan .
+uv run pymarkdown scan .
 ```
 
 ## :gift: Contributing
