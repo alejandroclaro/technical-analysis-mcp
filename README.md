@@ -1,6 +1,6 @@
 # Technical analysis MCP server
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![CI](https://github.com/alejandroclaro/technical-analysis-mcp/actions/workflows/ci.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![FastMCP](https://img.shields.io/badge/FastMCP-2.14.0-red)
