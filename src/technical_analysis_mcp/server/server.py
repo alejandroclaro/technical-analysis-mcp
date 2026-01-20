@@ -3,10 +3,11 @@
 from fastmcp.utilities.logging import get_logger
 from mcp.server.fastmcp import FastMCP
 
-from . import __version__
+from technical_analysis_mcp.models import Error, TickerInformation
+from technical_analysis_mcp.tools import fetch_ticker_information
+from technical_analysis_mcp.version import __version__
+
 from .instructions import INSTRUCTIONS
-from .models import Error, TickerInformation
-from .tools import fetch_ticker_information
 
 server = FastMCP(
     "technical-analysis",

@@ -14,7 +14,7 @@ from hamcrest import (
     not_none,
 )
 
-from src.technical_analysis_mcp.server import server
+from src.technical_analysis_mcp.server.server import server
 
 
 @pytest.mark.asyncio

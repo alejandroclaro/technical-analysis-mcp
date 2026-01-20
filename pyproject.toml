@@ -24,7 +24,8 @@ dev = [
 ]
 
 [project.scripts]
-server = "technical_analysis_mcp.server:main"
+server = "technical_analysis_mcp.server.server:main"
+repl = "technical_analysis_mcp.repl.repl:main"
 
 [tool.semantic_release]
 branches = ["main"]
@@ -76,6 +77,7 @@ line-length = 120
 include = [
   "pyproject.toml",
   "src/**/*.py",
+  "tests/*.py",
   "tests/**/*.py"
 ]
 
