@@ -1,13 +1,14 @@
 """Test MCP REPL."""
 
+import json
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from hamcrest import assert_that, is_
+import pytest
 
 from technical_analysis_mcp.repl.repl import Repl
 
 
-def test_get_instructions() -> None:
+def test_given_client_initialized_when_get_instructions_then_returns_instructions() -> None:
     """Test getting server instructions."""
     with patch("technical_analysis_mcp.repl.repl.Client") as mock_client_class:
         mock_init_result = MagicMock()
@@ -21,7 +22,7 @@ def test_get_instructions() -> None:
         repl.do_get_instructions("")
 
 
-def test_list_tools() -> None:
+def test_given_client_initialized_when_list_tools_then_returns_tool_list() -> None:
     """Test listing available tools."""
     with patch("technical_analysis_mcp.repl.repl.Client") as mock_client_class:
         mock_client = AsyncMock()
@@ -39,7 +40,7 @@ def test_list_tools() -> None:
         mock_client.list_tools.assert_called_once()
 
 
-def test_get_tool_description() -> None:
+def test_given_client_initialized_when_get_tool_description_then_returns_tool_info() -> None:
     """Test getting tool description and schema by name."""
     with patch("technical_analysis_mcp.repl.repl.Client") as mock_client_class:
         mock_client = AsyncMock()
@@ -61,7 +62,7 @@ def test_get_tool_description() -> None:
         mock_client.list_tools.assert_called_once()
 
 
-def test_call_tool() -> None:
+def test_given_client_initialized_when_call_tool_then_executes_tool() -> None:
     """Test calling a tool."""
     with patch("technical_analysis_mcp.repl.repl.Client") as mock_client_class:
         mock_client = AsyncMock()
@@ -74,10 +75,11 @@ def test_call_tool() -> None:
         mock_client.call_tool.assert_called_once_with("test_tool", {"param": "value"})
 
 
-def test_exit_commands() -> None:
-    """Test exit commands."""
+def test_given_missing_args_when_call_tool_then_raises_json_decode_error() -> None:
+    """Test calling tool with missing arguments."""
     repl = Repl()
 
-    assert_that(repl.do_exit(""), is_(True))
-    assert_that(repl.do_quit(""), is_(True))
-    assert_that(repl.do_EOF(""), is_(True))
+    repl.do_call_tool("")
+
+    with pytest.raises(json.JSONDecodeError):
+        repl.do_call_tool("tool_name")

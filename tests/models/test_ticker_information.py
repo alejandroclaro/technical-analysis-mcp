@@ -8,7 +8,7 @@ from hamcrest import assert_that, has_properties
 from technical_analysis_mcp.models import parse_yfinance_ticker_information
 
 
-def test_parse_yfinance_ticker_information_empty() -> None:
+def test_given_empty_info_when_parse_yfinance_ticker_information_then_raises_value_error() -> None:
     """Test parsing an empty yfinance Ticker.info dictionary."""
     info: dict[str, Any] = {}
 
@@ -16,7 +16,7 @@ def test_parse_yfinance_ticker_information_empty() -> None:
         parse_yfinance_ticker_information(info)
 
 
-def test_parse_yfinance_ticker_information_partial() -> None:
+def test_given_partial_info_when_parse_yfinance_ticker_information_then_raises_value_error() -> None:
     """Test parsing a partial yfinance Ticker.info dictionary."""
     info: dict[str, Any] = {
         "symbol": "AAPL",
@@ -30,7 +30,7 @@ def test_parse_yfinance_ticker_information_partial() -> None:
         parse_yfinance_ticker_information(info)
 
 
-def test_parse_yfinance_ticker_information_full() -> None:
+def test_given_full_info_when_parse_yfinance_ticker_information_then_returns_ticker_information() -> None:
     """Test parsing a full yfinance Ticker.info dictionary."""
     info: dict[str, Any] = {
         "symbol": "AAPL",
@@ -80,7 +80,7 @@ def test_parse_yfinance_ticker_information_full() -> None:
     )
 
 
-def test_parse_yfinance_ticker_information_invalid_types() -> None:
+def test_given_invalid_types_when_parse_yfinance_ticker_information_then_raises_value_error() -> None:
     """Test parsing a yfinance Ticker.info dictionary with invalid types."""
     info: dict[str, Any] = {
         "shortName": "Apple Inc.",
@@ -90,7 +90,7 @@ def test_parse_yfinance_ticker_information_invalid_types() -> None:
         parse_yfinance_ticker_information(info)
 
 
-def test_parse_yfinance_ticker_information_raises_type_error() -> None:
+def test_given_invalid_types_when_parse_yfinance_ticker_information_then_raises_type_error() -> None:
     """Test parsing a yfinance Ticker.info dictionary with invalid types that raise TypeError."""
     info: dict[str, Any] = {
         "symbol": 123,  # Invalid type

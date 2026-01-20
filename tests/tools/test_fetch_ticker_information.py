@@ -15,7 +15,7 @@ from technical_analysis_mcp.tools import fetch_ticker_information
 
 
 @pytest.mark.asyncio
-async def test_fetch_ticker_information_success() -> None:
+async def test_given_valid_ticker_when_fetch_ticker_information_then_returns_ticker_information() -> None:
     """Test fetching ticker information for a valid ticker."""
     result = await fetch_ticker_information("AAPL")
 
@@ -24,7 +24,7 @@ async def test_fetch_ticker_information_success() -> None:
 
 
 @pytest.mark.asyncio
-async def test_fetch_ticker_information_failure() -> None:
+async def test_given_invalid_ticker_when_fetch_ticker_information_then_returns_error() -> None:
     """Test fetching ticker information for an invalid ticker."""
     result = await fetch_ticker_information("INVALID_TICKER")
 

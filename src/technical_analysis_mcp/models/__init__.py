@@ -1,4 +1,4 @@
-"""Data Models Module."""
+"""Data models module."""
 
 from .error import Error
 from .ticker_information import TickerInformation, parse_yfinance_ticker_information

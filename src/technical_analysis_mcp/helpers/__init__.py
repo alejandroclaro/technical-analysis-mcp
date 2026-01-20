@@ -1,4 +1,4 @@
-"""Main entry point for utils."""
+"""Helpers module."""
 
 from .parsing import (
     get_dictionary_float,

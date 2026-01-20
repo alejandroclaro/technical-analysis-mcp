@@ -14,18 +14,18 @@ from hamcrest import (
     not_none,
 )
 
-from src.technical_analysis_mcp.server.server import server
+from technical_analysis_mcp.server.server import server
 
 
 @pytest.mark.asyncio
-async def test_server_runs() -> None:
+async def test_given_server_initialized_when_ping_then_returns_true() -> None:
     """Test the MCP server lifecycle."""
     async with Client(server) as client:
         assert_that(await client.ping(), is_(True))
 
 
 @pytest.mark.asyncio
-async def test_server_provides_instructions() -> None:
+async def test_given_server_initialized_when_get_instructions_then_returns_non_empty_instructions() -> None:
     """Test that the server provides instructions."""
     async with Client(server) as client:
         instructions = None
@@ -39,7 +39,7 @@ async def test_server_provides_instructions() -> None:
 
 
 @pytest.mark.asyncio
-async def test_tools_are_properly_registered() -> None:
+async def test_given_server_initialized_when_list_tools_then_returns_registered_tools() -> None:
     """Test that tools are properly registered with expected properties."""
     expected_tools = ["get_ticker_information"]
 
@@ -60,3 +60,26 @@ async def test_tools_are_properly_registered() -> None:
             assert_that(description.strip(), is_(not_(equal_to(""))))
             assert_that(output_schema, has_key("properties"))
             assert_that(output_schema["properties"], is_(not_none()))
+
+
+@pytest.mark.asyncio
+async def test_given_valid_ticker_when_call_get_ticker_information_then_returns_ticker_data() -> None:
+    """Test the get_ticker_information tool directly."""
+    async with Client(server) as client:
+        result = await client.call_tool("get_ticker_information", {"ticker": "AAPL"})
+        assert_that(result.structured_content, is_(not_none()))
+
+        structured_content = cast("dict[str, Any]", result.structured_content)
+        assert_that(structured_content, has_key("result"))
+
+        result_data = structured_content["result"]
+        assert_that(result_data["symbol"], equal_to("AAPL"))
+
+        result = await client.call_tool("get_ticker_information", {"ticker": "INVALID_TICKER"})
+        assert_that(result.structured_content, is_(not_none()))
+
+        structured_content = cast("dict[str, Any]", result.structured_content)
+        assert_that(structured_content, has_key("result"))
+
+        result_data = structured_content["result"]
+        assert_that(result_data, has_key("what"))

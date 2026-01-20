@@ -1,4 +1,4 @@
-"""Technical Analysis Tools Module."""
+"""Technical analysis tools module."""
 
 from .fetch_ticker_information import fetch_ticker_information
 

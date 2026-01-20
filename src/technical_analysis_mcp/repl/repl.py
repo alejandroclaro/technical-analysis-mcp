@@ -17,37 +17,93 @@ class Repl(cmd.Cmd):
     prompt = "mcp> "
 
     def __init__(self) -> None:
-        """Initialize the MCP REPL."""
+        """Initialize the MCP REPL.
+
+        Initializes the command-line interface and sets up the FastMCP client
+        connection to the technical analysis server.
+
+        """
         super().__init__()
         self.client = Client(server)
 
     def do_exit(self, arg: str) -> bool:
-        """Exit the REPL."""
+        """Exit the REPL.
+
+        Args:
+            arg: Command line argument (unused).
+
+        Returns:
+            bool: True to exit the REPL.
+
+        """
         del arg
         sys.stdout.write("Goodbye!\n")
         return True
 
     def do_quit(self, arg: str) -> bool:
-        """Exit the REPL."""
+        """Exit the REPL.
+
+        Alias for the exit command.
+
+        Args:
+            arg: Command line argument (unused).
+
+        Returns:
+            bool: True to exit the REPL.
+
+        """
         return self.do_exit(arg)
 
     def do_EOF(self, arg: str) -> bool:  # noqa: N802
-        """Exit on EOF (Ctrl+D)."""
+        """Exit on EOF (Ctrl+D).
+
+        Handles the end-of-file signal to gracefully exit the REPL.
+
+        Args:
+            arg: Command line argument (unused).
+
+        Returns:
+            bool: True to exit the REPL.
+
+        """
         sys.stdout.write("\n")
         return self.do_exit(arg)
 
     def do_get_instructions(self, arg: str) -> None:
-        """Get the MCP server instructions."""
+        """Get the MCP server instructions.
+
+        Retrieves and displays the server's initialization instructions
+        that describe the server's capabilities and usage guidelines.
+
+        Args:
+            arg: Command line argument (unused).
+
+        """
         del arg
         asyncio.run(self._get_instructions())
 
     def do_list_tools(self, arg: str) -> None:
-        """List available tools."""
+        """List available tools.
+
+        Displays a list of all registered tools available on the server.
+
+        Args:
+            arg: Command line argument (unused).
+
+        """
         del arg
         asyncio.run(self._list_tools())
 
     def do_get_tool_description(self, arg: str) -> None:
-        """Get tool description and schema by name."""
+        """Get tool description and schema by name.
+
+        Displays detailed information about a specific tool including its
+        description, input schema, and output schema.
+
+        Args:
+            arg: The name of the tool to get information about.
+
+        """
         if not arg:
             sys.stdout.write("Usage: tool <tool_name>\n")
             return
@@ -55,7 +111,19 @@ class Repl(cmd.Cmd):
         asyncio.run(self._get_tool_info(arg))
 
     def do_call_tool(self, arg: str) -> None:
-        """Call a tool with arguments."""
+        """Call a tool with arguments.
+
+        Executes a specific tool with the provided arguments and displays
+        the result.
+
+        Args:
+            arg: Command line argument containing tool name and JSON arguments.
+                Format: "<tool_name> <json_args>"
+
+        Raises:
+            json.JSONDecodeError: If the provided arguments are not valid JSON.
+
+        """
         if not arg:
             sys.stdout.write("Usage: call <tool_name> <args>\n")
             return
@@ -71,7 +139,12 @@ class Repl(cmd.Cmd):
         asyncio.run(self._call_tool(tool_name, tool_args))
 
     async def _get_instructions(self) -> None:
-        """Get the MCP server instructions."""
+        """Get the MCP server instructions.
+
+        Retrieves the server's initialization instructions asynchronously
+        and displays them to the user.
+
+        """
         async with self.client:
             result = self.client.initialize_result
             instructions = "No instructions available."
@@ -83,7 +156,12 @@ class Repl(cmd.Cmd):
             sys.stdout.write("\n")
 
     async def _list_tools(self) -> None:
-        """List available tools."""
+        """List available tools.
+
+        Retrieves the list of registered tools from the server and
+        displays them to the user.
+
+        """
         async with self.client:
             tools = await self.client.list_tools()
 
@@ -91,7 +169,15 @@ class Repl(cmd.Cmd):
                 sys.stdout.write(f"- {tool.name}\n")
 
     async def _get_tool_info(self, tool_name: str) -> None:
-        """Get tool description and schema."""
+        """Get tool description and schema.
+
+        Retrieves detailed information about a specific tool including its
+        description, input schema, and output schema.
+
+        Args:
+            tool_name: The name of the tool to get information about.
+
+        """
         async with self.client:
             tools = await self.client.list_tools()
             tool = next((t for t in tools if t.name == tool_name), None)
@@ -116,7 +202,19 @@ class Repl(cmd.Cmd):
             sys.stdout.write("\n")
 
     async def _call_tool(self, tool_name: str, tool_args: str) -> None:
-        """Call a tool with arguments."""
+        """Call a tool with arguments.
+
+        Executes a specific tool with the provided JSON arguments and
+        displays the result.
+
+        Args:
+            tool_name: The name of the tool to call.
+            tool_args: JSON string containing the tool arguments.
+
+        Raises:
+            json.JSONDecodeError: If the provided arguments are not valid JSON.
+
+        """
         async with self.client:
             args_dict = json.loads(tool_args)
 
@@ -126,7 +224,12 @@ class Repl(cmd.Cmd):
 
 
 def main() -> None:
-    """Entry point for the MCP REPL."""
+    """Entry point for the MCP REPL.
+
+    Initializes and starts the REPL command loop for interacting with
+    the technical analysis MCP server.
+
+    """
     repl = Repl()
     repl.cmdloop()
 

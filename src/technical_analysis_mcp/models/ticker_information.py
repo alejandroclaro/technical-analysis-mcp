@@ -4,7 +4,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from technical_analysis_mcp.utils import (
+from technical_analysis_mcp.helpers import (
     get_dictionary_optional_float,
     get_dictionary_optional_string,
     get_dictionary_string,
