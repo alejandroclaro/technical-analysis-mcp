@@ -41,6 +41,7 @@ Follow these steps exactly:
 
 - **Typing:** Strict `pyright` complaint.
 - **Unit Test Assertions:** Use Hamcrest: `assert_that(actual, equal_to(expected))`.
+- **Unit Test Names:** Use Given-Then-When naming style test function names.
 - **Docstrings:** Google-style is mandatory.
 - **Configuration:** Prefer updating `pyproject.toml` over creating new config
   files.

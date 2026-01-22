@@ -26,12 +26,14 @@ def test_given_client_initialized_when_list_tools_then_returns_tool_list() -> No
     """Test listing available tools."""
     with patch("technical_analysis_mcp.repl.repl.Client") as mock_client_class:
         mock_client = AsyncMock()
+
         mock_client.list_tools = AsyncMock(
             return_value=[
                 MagicMock(name="tool1", description="Tool 1"),
                 MagicMock(name="tool2", description="Tool 2"),
             ]
         )
+
         mock_client_class.return_value = mock_client
 
         repl = Repl()
@@ -44,6 +46,7 @@ def test_given_client_initialized_when_get_tool_description_then_returns_tool_in
     """Test getting tool description and schema by name."""
     with patch("technical_analysis_mcp.repl.repl.Client") as mock_client_class:
         mock_client = AsyncMock()
+
         mock_client.list_tools = AsyncMock(
             return_value=[
                 MagicMock(
@@ -54,6 +57,7 @@ def test_given_client_initialized_when_get_tool_description_then_returns_tool_in
                 )
             ]
         )
+
         mock_client_class.return_value = mock_client
 
         repl = Repl()

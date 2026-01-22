@@ -56,7 +56,7 @@ development.
 ```json
 {
   "mcpServers": {
-    "technical-analysis": {
+    "ta": {
       "command": "uvx",
       "args": ["technical-analysis-mcp"]
     }
@@ -69,7 +69,7 @@ development.
 ```json
 {
   "mcpServers": {
-    "Technical-analysis": {
+    "ta": {
       "command": "uv",
       "args": [
         "run",

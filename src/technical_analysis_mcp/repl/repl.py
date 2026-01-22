@@ -24,111 +24,156 @@ class Repl(cmd.Cmd):
 
         """
         super().__init__()
+        self._hist = []
         self.client = Client(server)
 
-    def do_exit(self, arg: str) -> bool:
+    def precmd(self, line: str) -> str:
+        """This method is called after the line has been input but before it has been interpreted.
+
+        Args:
+            line: Command line argument (unused).
+
+        Returns:
+            str: The same input argument.
+
+        """
+        self._hist += [line.strip()]
+        return line
+
+    def onecmd(self, line: str) -> bool:
+        """Interpret the argument as though it had been typed in response to the prompt.
+
+        Args:
+            line: Command line argument (unused).
+
+        Returns:
+            bool: False to continue in the REPL.
+
+        """
+        try:
+            return cmd.Cmd.onecmd(self, line)
+        except Exception as e:  # noqa: BLE001
+            sys.stderr.write(f"Exception: {e}\n")
+            sys.stderr.write("\nCheck yout internet connection.\n")
+            return False
+
+    def do_exit(self, line: str) -> bool:
         """Exit the REPL.
 
         Args:
-            arg: Command line argument (unused).
+            line: Command line argument (unused).
 
         Returns:
             bool: True to exit the REPL.
 
         """
-        del arg
+        del line
         sys.stdout.write("Goodbye!\n")
         return True
 
-    def do_quit(self, arg: str) -> bool:
+    def do_quit(self, line: str) -> bool:
         """Exit the REPL.
 
         Alias for the exit command.
 
         Args:
-            arg: Command line argument (unused).
+            line: Command line argument (unused).
 
         Returns:
             bool: True to exit the REPL.
 
         """
-        return self.do_exit(arg)
+        return self.do_exit(line)
 
-    def do_EOF(self, arg: str) -> bool:  # noqa: N802
+    def do_EOF(self, line: str) -> bool:  # noqa: N802
         """Exit on EOF (Ctrl+D).
 
         Handles the end-of-file signal to gracefully exit the REPL.
 
         Args:
-            arg: Command line argument (unused).
+            line: Command line argument (unused).
 
         Returns:
             bool: True to exit the REPL.
 
         """
         sys.stdout.write("\n")
-        return self.do_exit(arg)
+        return self.do_exit(line)
 
-    def do_get_instructions(self, arg: str) -> None:
+    def do_history(self, line: str) -> None:
+        """Occurs on "history" command.
+
+        Print a list of commands that have been previously entered.
+
+        Args:
+            line: Command line argument (unused).
+
+        """
+        del line
+
+        for entry in self._hist:
+            sys.stdout.write(f"{entry}\n")
+
+    def do_get_instructions(self, line: str) -> None:
         """Get the MCP server instructions.
 
         Retrieves and displays the server's initialization instructions
         that describe the server's capabilities and usage guidelines.
 
         Args:
-            arg: Command line argument (unused).
+            line: Command line argument (unused).
 
         """
-        del arg
+        del line
         asyncio.run(self._get_instructions())
 
-    def do_list_tools(self, arg: str) -> None:
+    def do_list_tools(self, line: str) -> None:
         """List available tools.
 
         Displays a list of all registered tools available on the server.
 
         Args:
-            arg: Command line argument (unused).
+            line: Command line argument (unused).
 
         """
-        del arg
+        del line
         asyncio.run(self._list_tools())
 
-    def do_get_tool_description(self, arg: str) -> None:
+    def do_get_tool_description(self, line: str) -> None:
         """Get tool description and schema by name.
 
         Displays detailed information about a specific tool including its
         description, input schema, and output schema.
 
         Args:
-            arg: The name of the tool to get information about.
+            line: The name of the tool to get information about.
 
         """
-        if not arg:
+        if not line:
             sys.stdout.write("Usage: tool <tool_name>\n")
             return
 
-        asyncio.run(self._get_tool_info(arg))
+        asyncio.run(self._get_tool_info(line))
 
-    def do_call_tool(self, arg: str) -> None:
+    def do_call_tool(self, line: str) -> None:
         """Call a tool with arguments.
 
         Executes a specific tool with the provided arguments and displays
         the result.
 
         Args:
-            arg: Command line argument containing tool name and JSON arguments.
+            line: Command line argument containing tool name and JSON arguments.
                 Format: "<tool_name> <json_args>"
 
         Raises:
             json.JSONDecodeError: If the provided arguments are not valid JSON.
 
         """
-        if not arg:
+        if not line:
             sys.stdout.write("Usage: call <tool_name> <args>\n")
             return
 
-        parts = arg.split()
+        parts = line.split()
 
         if len(parts) < 1:
             sys.stdout.write("Usage: call <tool_name> <args>\n")
