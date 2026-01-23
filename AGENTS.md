@@ -68,10 +68,11 @@ Follow these steps exactly:
 technical-analysis-mcp/
 ├── src/
 │   └── technical_analysis_mcp/
-│       ├── server.py           # FastMCP entry point
+│       ├── helpers/            # Utility functions (math, yfinance wrappers)
 │       ├── models/             # Pydantic models / Data structures
-│       ├── tools/              # Core analysis logic & tool definitions
-│       └── helpers/            # Utility functions (math, yfinance wrappers)
+│       ├── repl/               # A REPL client to interact with the server.
+│       ├── server/             # FastMCP entry point
+│       └── tools/              # Core analysis logic & tool definitions
 ├── tests/                      # Test suite (mirrors src/ structure)
 ├── AGENT.md                    # This guide
 ├── pyproject.toml              # Tooling & Dependency config

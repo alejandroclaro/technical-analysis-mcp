@@ -41,7 +41,7 @@ async def test_given_server_initialized_when_get_instructions_then_returns_non_e
 @pytest.mark.asyncio
 async def test_given_server_initialized_when_list_tools_then_returns_registered_tools() -> None:
     """Test that tools are properly registered with expected properties."""
-    expected_tools = ["get_ticker_information"]
+    expected_tools = ["get_ticker_information", "get_asset_price_history"]
 
     async with Client(server) as client:
         tools = await client.list_tools()
@@ -64,7 +64,7 @@ async def test_given_server_initialized_when_list_tools_then_returns_registered_
 
 @pytest.mark.asyncio
 async def test_given_valid_ticker_when_call_get_ticker_information_then_returns_ticker_data() -> None:
-    """Test the get_ticker_information tool directly."""
+    """Test the get_ticker_information tool with valid ticker."""
     async with Client(server) as client:
         result = await client.call_tool("get_ticker_information", {"ticker": "AAPL"})
         assert_that(result.structured_content, is_(not_none()))
@@ -75,7 +75,45 @@ async def test_given_valid_ticker_when_call_get_ticker_information_then_returns_
         result_data = structured_content["result"]
         assert_that(result_data["symbol"], equal_to("AAPL"))
 
+
+@pytest.mark.asyncio
+async def test_given_invalid_ticker_when_call_get_ticker_information_then_returns_error() -> None:
+    """Test the get_ticker_information tool with invalid ticker."""
+    async with Client(server) as client:
         result = await client.call_tool("get_ticker_information", {"ticker": "INVALID_TICKER"})
+        assert_that(result.structured_content, is_(not_none()))
+
+        structured_content = cast("dict[str, Any]", result.structured_content)
+        assert_that(structured_content, has_key("result"))
+
+        result_data = structured_content["result"]
+        assert_that(result_data, has_key("what"))
+
+
+@pytest.mark.asyncio
+async def test_given_valid_parameters_when_call_get_asset_price_history_then_returns_price_data() -> None:
+    """Test the get_asset_price_history tool with valid parameters."""
+    async with Client(server) as client:
+        params = {"ticker": "AAPL", "period": "1mo", "interval": "1d"}
+        result = await client.call_tool("get_asset_price_history", params)
+        assert_that(result.structured_content, is_(not_none()))
+
+        structured_content = cast("dict[str, Any]", result.structured_content)
+        assert_that(structured_content, has_key("result"))
+
+        result_data = structured_content["result"]
+        assert_that(result_data["ticker"], equal_to("AAPL"))
+        assert_that(result_data["period"], equal_to("1mo"))
+        assert_that(result_data["interval"], equal_to("1d"))
+        assert_that(result_data, has_key("prices"))
+
+
+@pytest.mark.asyncio
+async def test_given_invalid_ticker_when_call_get_asset_price_history_then_returns_error() -> None:
+    """Test the get_asset_price_history tool with invalid ticker."""
+    async with Client(server) as client:
+        params = {"ticker": "INVALID_TICKER", "period": "1mo", "interval": "1d"}
+        result = await client.call_tool("get_asset_price_history", params)
         assert_that(result.structured_content, is_(not_none()))
 
         structured_content = cast("dict[str, Any]", result.structured_content)
