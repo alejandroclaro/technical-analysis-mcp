@@ -3,8 +3,16 @@
 from fastmcp.utilities.logging import get_logger
 from mcp.server.fastmcp import FastMCP
 
-from technical_analysis_mcp.models import AssetPriceHistory, Error, Interval, Period, TickerInformation
-from technical_analysis_mcp.tools import fetch_asset_price_history, fetch_ticker_information
+from technical_analysis_mcp.models import (
+    AssetPriceHistory,
+    Error,
+    Interval,
+    Period,
+    PriceSource,
+    TickerInformation,
+    TimeSeries,
+)
+from technical_analysis_mcp.tools import compute_rsi, fetch_asset_price_history, fetch_ticker_information
 from technical_analysis_mcp.version import __version__
 
 from .instructions import INSTRUCTIONS
@@ -78,6 +86,44 @@ async def get_asset_price_history(
 
     """
     return await fetch_asset_price_history(ticker, period, interval)
+
+
+@server.tool(structured_output=True)
+async def get_rsi(
+    ticker: str,
+    source: PriceSource,
+    period: Period,
+    interval: Interval,
+    candles: int = 14,
+) -> TimeSeries | Error:
+    """Compute the Relative Strength Index (RSI) for a given ticker.
+
+    The Relative Strength Index (RSI) is a momentum oscillator that measures
+    the speed and change of price movements. RSI oscillates between zero and
+    100. Traditionally, RSI is considered overbought when above 70 and
+    oversold when below 30.
+
+    Use this tool when you need to analyze momentum, identify overbought or
+    oversold conditions, or generate trading signals based on RSI divergences
+    or crossovers.
+
+    Args:
+        ticker (str): The unique identifier for the asset.
+        source (str): The price source to use for calculation.
+                      Options: "open", "high", "low", "close".
+                      Typically "close" is used for RSI.
+        period (str): The time range for historical data retrieval.
+        interval (str): The frequency of data points.
+        candles (int): The number of candles/samples to use for RSI calculation.
+                       Default is 14 candles.
+
+    Returns:
+        TimeSeries | Error: The RSI time series data or an error if the
+        ticker is invalid, insufficient data is available, or parameters
+        are invalid.
+
+    """
+    return await compute_rsi(ticker, source, period, interval, candles)
 
 
 def main() -> None:
