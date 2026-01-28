@@ -5,6 +5,7 @@ import json
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
+from fastmcp.client.client import CallToolResult
 from hamcrest import assert_that, equal_to, is_, not_none
 
 from technical_analysis_mcp.repl.repl import Repl
@@ -165,7 +166,7 @@ def test_given_client_initialized_when_call_tool_then_executes_tool() -> None:
     """Test calling a tool with valid arguments."""
     with patch("technical_analysis_mcp.repl.repl.Client") as client_class_mock:
         client_mock = AsyncMock()
-        client_mock.call_tool = AsyncMock(return_value={"result": "success"})
+        client_mock.call_tool = AsyncMock(return_value=CallToolResult(content=[], structured_content=None, meta=None))
         client_class_mock.return_value = client_mock
 
         repl = Repl()

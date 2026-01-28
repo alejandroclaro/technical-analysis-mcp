@@ -264,7 +264,14 @@ class Repl(cmd.Cmd):
             args_dict = json.loads(tool_args)
 
             result = await self.client.call_tool(tool_name, args_dict)
-            sys.stdout.write(json.dumps(result))
+
+            if result.structured_content is not None:
+                sys.stdout.write(json.dumps(result.structured_content))
+            else:
+                for c in result.content:
+                    if c.type == "text":
+                        sys.stdout.write(c.text)
+
             sys.stdout.write("\n")
 
 
