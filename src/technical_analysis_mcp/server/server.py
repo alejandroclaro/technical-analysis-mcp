@@ -12,15 +12,18 @@ from technical_analysis_mcp.models import (
     TickerInformation,
     TimeSeries,
 )
-from technical_analysis_mcp.tools import compute_rsi, fetch_asset_price_history, fetch_ticker_information
+from technical_analysis_mcp.tools import compute_rsi, compute_sma, fetch_asset_price_history, fetch_ticker_information
 from technical_analysis_mcp.version import __version__
 
 from .instructions import INSTRUCTIONS
 
 server = FastMCP(
     "technical-analysis",
-    dependencies=["yfinance>=1.0"],
     instructions=INSTRUCTIONS,
+    dependencies=[
+        "yfinance>=1.0",
+        "pandas>=2.3.3",
+    ],
 )
 
 
@@ -124,6 +127,44 @@ async def get_rsi(
 
     """
     return await compute_rsi(ticker, source, period, interval, candles)
+
+
+@server.tool(structured_output=True)
+async def get_sma(
+    ticker: str,
+    source: PriceSource,
+    period: Period,
+    interval: Interval,
+    window: int = 20,
+) -> TimeSeries | Error:
+    """Compute the Simple Moving Average (SMA) for a given ticker.
+
+    The Simple Moving Average (SMA) is a technical indicator that calculates
+    the average price of an asset over a specified period. It smooths out
+    price data by creating a constantly updated average price, which helps
+    identify the trend direction and potential support/resistance levels.
+
+    Use this tool when you need to identify trends, determine support and
+    resistance levels, or generate trading signals based on moving average
+    crossovers (e.g., when price crosses above/below the SMA).
+
+    Args:
+        ticker (str): The unique identifier for the asset.
+        source (str): The price source to use for calculation.
+                      Options: "open", "high", "low", "close".
+                      Typically "close" is used for SMA.
+        period (str): The time range for historical data retrieval.
+        interval (str): The frequency of data points.
+        window (int): The moving window period for SMA calculation.
+                      Default is 20 periods.
+
+    Returns:
+        TimeSeries | Error: The SMA time series data or an error if the
+        ticker is invalid, insufficient data is available, or parameters
+        are invalid.
+
+    """
+    return await compute_sma(ticker, source, period, interval, window)
 
 
 def main() -> None:

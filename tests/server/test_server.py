@@ -42,7 +42,7 @@ async def test_given_server_initialized_when_get_instructions_then_returns_non_e
 @pytest.mark.asyncio
 async def test_given_server_initialized_when_list_tools_then_returns_registered_tools() -> None:
     """Test that tools are properly registered with expected properties."""
-    expected_tools = ["get_ticker_information", "get_asset_price_history", "get_rsi"]
+    expected_tools = ["get_ticker_information", "get_asset_price_history", "get_rsi", "get_sma"]
 
     async with Client(server) as client:
         tools = await client.list_tools()
@@ -82,6 +82,50 @@ async def test_given_invalid_ticker_when_call_get_ticker_information_then_return
     """Test the get_ticker_information tool with invalid ticker."""
     async with Client(server) as client:
         result = await client.call_tool("get_ticker_information", {"ticker": "INVALID_TICKER"})
+        assert_that(result.structured_content, is_(not_none()))
+
+        structured_content = cast("dict[str, Any]", result.structured_content)
+        assert_that(structured_content, has_key("result"))
+
+        result_data = structured_content["result"]
+        assert_that(result_data, has_key("what"))
+
+
+@pytest.mark.asyncio
+async def test_given_valid_parameters_when_call_get_sma_then_returns_sma_data() -> None:
+    """Test the get_sma tool with valid parameters."""
+    async with Client(server) as client:
+        params = {
+            "ticker": "AAPL",
+            "source": "close",
+            "period": "1mo",
+            "interval": "1d",
+            "window": 20,
+        }
+
+        result = await client.call_tool("get_sma", params)
+        assert_that(result.structured_content, is_(not_none()))
+
+        structured_content = cast("dict[str, Any]", result.structured_content)
+        assert_that(structured_content, has_key("result"))
+
+        result_data = structured_content["result"]
+        assert_that(result_data["ticker"], equal_to("AAPL"))
+
+
+@pytest.mark.asyncio
+async def test_given_invalid_window_when_call_get_sma_then_returns_error() -> None:
+    """Test the get_sma tool with invalid window parameter."""
+    async with Client(server) as client:
+        params = {
+            "ticker": "AAPL",
+            "source": "close",
+            "period": "1mo",
+            "interval": "1d",
+            "window": 0,  # Invalid: must be positive
+        }
+
+        result = await client.call_tool("get_sma", params)
         assert_that(result.structured_content, is_(not_none()))
 
         structured_content = cast("dict[str, Any]", result.structured_content)

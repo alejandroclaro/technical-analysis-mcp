@@ -13,7 +13,8 @@ INSTRUCTIONS = (
     "## General Information"
     "\n\n"
     "- The server provides structured responses to improve predictability and processing "
-    "by LLMs.\n"
+    "by LLMs."
+    "\n"
     "- Errors are returned as structured objects rather than raising exceptions.\n"
     "- Inputs are validated before processing and edge cases are handled gracefully."
 )
