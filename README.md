@@ -82,17 +82,19 @@ development.
 }
 ```
 
-## :chart_with_upwards_trend: MCP Tools Available
+## :chart_with_upwards_trend: MCP tools
 
 The following tools are available in this MCP server:
 
 <!-- markdownlint-disable MD013 -->
+<!-- pyml disable md013 -->
 | Tool Name | Description |
 | :-------- | :---------- |
 | `get_ticker_information` | Retrieves detailed financial, metadata, and real-time descriptive information for a specific financial instrument or company. |
 | `get_asset_price_history` | Fetches comprehensive historical pricing information including OHLC prices, volume, dividends, and stock splits. |
 | `get_sma` | Computes the Simple Moving Average (SMA) technical indicator for trend analysis and support/resistance levels. |
 | `get_rsi` | Computes the Relative Strength Index (RSI) momentum oscillator for identifying overbought/oversold conditions. |
+<!-- pyml enable md013 -->
 <!-- markdownlint-enable MD013 -->
 
 ## :computer: Interactive REPL
@@ -132,9 +134,7 @@ mcp> call_tool get_ticker_information '{"ticker": "AAPL"}'
 {"symbol": "AAPL", "name": "Apple Inc.", ...}
 ```
 
-## :white_check_mark: Implementation Status
-
-### ✅ Implemention state
+## :white_check_mark: Implementation status
 
 - Core data fetching tools:
   - [X] Ticker information retrieval (company details, sector, market cap, etc.)

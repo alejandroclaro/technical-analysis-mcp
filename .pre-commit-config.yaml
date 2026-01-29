@@ -13,10 +13,10 @@ repos:
     hooks:
       - id: validate-pyproject
 
-  - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.13.0
+  - repo: https://github.com/jackdewinter/pymarkdown
+    rev: v0.9.34
     hooks:
-      - id: markdownlint-cli2
+      - id: pymarkdown
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.10
