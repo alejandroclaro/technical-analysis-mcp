@@ -1,89 +1,64 @@
 """Module for computing Simple Moving Average (SMA)."""
 
 from datetime import datetime
+from typing import cast
+
+import pandas as pd
 
 from technical_analysis_mcp.models import (
     DataPoint,
     Error,
     Interval,
     Period,
-    Price,
     PriceSource,
     TimeSeries,
+    get_price_series,
 )
 
 from .fetch_asset_price_history import fetch_asset_price_history
 
 
-def extract_price_data(prices: list[Price], source: PriceSource) -> list[tuple[datetime, float]]:
-    """Extract price data from Price objects based on the specified source.
+def compute_sma_from_time_series(
+    series: pd.Series,
+    window: int,
+) -> pd.Series:
+    """Compute Simple Moving Average values using pandas.
 
     Args:
-        prices: List of Price objects.
-        source: Which price field to extract (open, high, low, close).
+        series: The pandas series with price values and datetime index.
+        window: The moving window period.
 
     Returns:
-        List of tuples containing (datetime, price_value).
+        The pandas Series of SMA values.
+
     """
-    extracted_data: list[tuple[datetime, float]] = []
+    if len(series) < window or window <= 0:
+        return pd.Series(dtype=float)
 
-    for price in prices:
-        if source == "open":
-            extracted_data.append((price.date, price.open))
-        elif source == "high":
-            extracted_data.append((price.date, price.high))
-        elif source == "low":
-            extracted_data.append((price.date, price.low))
-        else:
-            extracted_data.append((price.date, price.close))
+    mean = cast("pd.Series", series.rolling(window=window).mean())
 
-    return extracted_data
-
-
-def compute_sma_values(
-    prices: list[float],
-    period: int,
-) -> list[float]:
-    """Compute Simple Moving Average values.
-
-    Args:
-        prices: List of price values.
-        period: The moving window period.
-
-    Returns:
-        List of SMA values.
-    """
-    if len(prices) < period or period <= 0:
-        return []
-
-    sma_values: list[float] = []
-
-    for i in range(period - 1, len(prices)):
-        window = prices[i - period + 1 : i + 1]
-        sma = sum(window) / period
-        sma_values.append(sma)
-
-    return sma_values
+    return mean.dropna()
 
 
 async def compute_sma(
     ticker: str,
-    source: PriceSource,
     period: Period,
     interval: Interval,
     window: int = 20,
+    source: PriceSource = "close",
 ) -> TimeSeries | Error:
     """Compute the Simple Moving Average (SMA) for a given ticker.
 
     Args:
         ticker: The ticker symbol (e.g., "AAPL").
-        source: The price source to use.
         period: The time period for which to fetch historical data.
         interval: The interval between data points.
         window: The moving window period for SMA calculation (default 20).
+        source: The price source to use.
 
     Returns:
         The indicator series.
+
     """
     if window <= 0:
         return Error(what=f"SMA window must be positive, got: {window}")
@@ -101,11 +76,12 @@ async def compute_sma(
             f"Try a) increasing the period, b) reducing the interval, c) or reducing the SMA window."
         )
 
-    price_data = extract_price_data(history.prices, source)
-    dates = [date for date, _ in price_data]
-    values = [value for _, value in price_data]
-    sma_values = compute_sma_values(values, window)
+    price_series = get_price_series(history, source)
+    sma = compute_sma_from_time_series(price_series, window)
+    data_points = []
 
-    result = [DataPoint(date=dates[i + window - 1], value=float(sma_values[i])) for i in range(len(sma_values))]
+    for date, value in sma.items():
+        if isinstance(date, datetime):
+            data_points.append(DataPoint(date=date, value=float(value)))
 
-    return TimeSeries(ticker=ticker, data_points=result)
+    return TimeSeries(ticker=ticker, data_points=data_points)

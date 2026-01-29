@@ -27,6 +27,7 @@ async def fetch_asset_price_history(
 
     Returns:
         The historical asset prices. If no data is found, an error is returned.
+
     """
     try:
         information = yf.Ticker(ticker)

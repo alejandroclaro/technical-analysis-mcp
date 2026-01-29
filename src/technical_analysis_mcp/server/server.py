@@ -92,50 +92,12 @@ async def get_asset_price_history(
 
 
 @server.tool(structured_output=True)
-async def get_rsi(
-    ticker: str,
-    source: PriceSource,
-    period: Period,
-    interval: Interval,
-    candles: int = 14,
-) -> TimeSeries | Error:
-    """Compute the Relative Strength Index (RSI) for a given ticker.
-
-    The Relative Strength Index (RSI) is a momentum oscillator that measures
-    the speed and change of price movements. RSI oscillates between zero and
-    100. Traditionally, RSI is considered overbought when above 70 and
-    oversold when below 30.
-
-    Use this tool when you need to analyze momentum, identify overbought or
-    oversold conditions, or generate trading signals based on RSI divergences
-    or crossovers.
-
-    Args:
-        ticker (str): The unique identifier for the asset.
-        source (str): The price source to use for calculation.
-                      Options: "open", "high", "low", "close".
-                      Typically "close" is used for RSI.
-        period (str): The time range for historical data retrieval.
-        interval (str): The frequency of data points.
-        candles (int): The number of candles/samples to use for RSI calculation.
-                       Default is 14 candles.
-
-    Returns:
-        TimeSeries | Error: The RSI time series data or an error if the
-        ticker is invalid, insufficient data is available, or parameters
-        are invalid.
-
-    """
-    return await compute_rsi(ticker, source, period, interval, candles)
-
-
-@server.tool(structured_output=True)
 async def get_sma(
     ticker: str,
-    source: PriceSource,
     period: Period,
     interval: Interval,
     window: int = 20,
+    source: PriceSource = "close",
 ) -> TimeSeries | Error:
     """Compute the Simple Moving Average (SMA) for a given ticker.
 
@@ -150,13 +112,13 @@ async def get_sma(
 
     Args:
         ticker (str): The unique identifier for the asset.
-        source (str): The price source to use for calculation.
-                      Options: "open", "high", "low", "close".
-                      Typically "close" is used for SMA.
         period (str): The time range for historical data retrieval.
         interval (str): The frequency of data points.
         window (int): The moving window period for SMA calculation.
                       Default is 20 periods.
+        source (str): The price source to use for calculation.
+                      Options: "open", "high", "low", "close".
+                      Typically "close" is used for SMA.
 
     Returns:
         TimeSeries | Error: The SMA time series data or an error if the
@@ -164,7 +126,45 @@ async def get_sma(
         are invalid.
 
     """
-    return await compute_sma(ticker, source, period, interval, window)
+    return await compute_sma(ticker, period, interval, window, source)
+
+
+@server.tool(structured_output=True)
+async def get_rsi(
+    ticker: str,
+    period: Period,
+    interval: Interval,
+    window: int = 14,
+    source: PriceSource = "close",
+) -> TimeSeries | Error:
+    """Compute the Relative Strength Index (RSI) for a given ticker.
+
+    The Relative Strength Index (RSI) is a momentum oscillator that measures
+    the speed and change of price movements. RSI oscillates between zero and
+    100. Traditionally, RSI is considered overbought when above 70 and
+    oversold when below 30.
+
+    Use this tool when you need to analyze momentum, identify overbought or
+    oversold conditions, or generate trading signals based on RSI divergences
+    or crossovers.
+
+    Args:
+        ticker (str): The unique identifier for the asset.
+        period (str): The time range for historical data retrieval.
+        interval (str): The frequency of data points.
+        window (int): The number of candles/samples to use for RSI calculation.
+                      Default is 14 candles.
+        source (str): The price source to use for calculation.
+                      Options: "open", "high", "low", "close".
+                      Typically "close" is used for RSI.
+
+    Returns:
+        TimeSeries | Error: The RSI time series data or an error if the
+        ticker is invalid, insufficient data is available, or parameters
+        are invalid.
+
+    """
+    return await compute_rsi(ticker, period, interval, window, source)
 
 
 def main() -> None:

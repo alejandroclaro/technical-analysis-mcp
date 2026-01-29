@@ -1,6 +1,6 @@
 """Data models module."""
 
-from .asset_price_history import AssetPriceHistory
+from .asset_price_history import AssetPriceHistory, get_price_series
 from .data_point import DataPoint
 from .error import Error
 from .interval import Interval
@@ -20,5 +20,6 @@ __all__ = [
     "PriceSource",
     "TickerInformation",
     "TimeSeries",
+    "get_price_series",
     "parse_yfinance_ticker_information",
 ]
