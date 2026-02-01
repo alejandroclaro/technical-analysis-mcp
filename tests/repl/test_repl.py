@@ -159,7 +159,7 @@ def test_given_client_initialized_when_get_tool_description_then_returns_tool_in
             client_mock.list_tools.assert_called_once()
             write_mock.reset_mock()
             repl.do_get_tool_description("")
-            write_mock.assert_called_with("Usage: tool <tool_name>\n")
+            write_mock.assert_called_with("Usage: tool_description <tool_name>\n")
 
 
 def test_given_client_initialized_when_call_tool_then_executes_tool() -> None:
@@ -191,7 +191,7 @@ def test_given_missing_tool_name_when_get_tool_description_then_shows_usage() ->
 
     with patch("sys.stdout.write") as write_mock:
         repl.do_get_tool_description("")
-        write_mock.assert_called_once_with("Usage: tool <tool_name>\n")
+        write_mock.assert_called_once_with("Usage: tool_description <tool_name>\n")
 
 
 def test_given_missing_arguments_when_call_tool_then_shows_usage() -> None:
@@ -200,4 +200,4 @@ def test_given_missing_arguments_when_call_tool_then_shows_usage() -> None:
 
     with patch("sys.stdout.write") as write_mock:
         repl.do_call_tool("")
-        write_mock.assert_called_once_with("Usage: call <tool_name> <args>\n")
+        write_mock.assert_called_once_with("Usage: call_tool <tool_name> <args>\n")

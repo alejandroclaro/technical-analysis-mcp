@@ -10,6 +10,7 @@ dependencies = [
   "fastmcp>=2.14.3",
   "pandas>=2.3.3",
   "yfinance>=1.0",
+  "matplotlib>=3.8.0",
 ]
 
 [dependency-groups]
@@ -22,6 +23,7 @@ dev = [
   "pytest-cov>=5.0.0",
   "pytest>=9.0.2",
   "ruff>=0.14.13",
+  "stringcase>=1.2.0",
 ]
 
 [project.scripts]

@@ -117,9 +117,9 @@ async def test_should_compute_sma_when_valid_ticker_given() -> None:
     time_series = cast("TimeSeries", result)
 
     assert_that(time_series.ticker, equal_to("AAPL"))
-    assert_that(time_series.data_points, has_length(greater_than(0)))
+    assert_that(time_series.points, has_length(greater_than(0)))
 
-    for data_point in time_series.data_points:
+    for data_point in time_series.points:
         assert_that(data_point.value, greater_than(0.0))
 
 
@@ -172,4 +172,4 @@ async def test_should_compute_sma_with_different_windows_given() -> None:
     assert_that(result_20, is_(instance_of(TimeSeries)))
     time_series_20 = cast("TimeSeries", result_20)
 
-    assert_that(len(time_series_20.data_points), equal_to(len(time_series_10.data_points) - 10))
+    assert_that(len(time_series_20.points), equal_to(len(time_series_10.points) - 10))

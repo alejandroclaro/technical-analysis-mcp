@@ -14,4 +14,4 @@ class TimeSeries(BaseModel):
     """A time series of data points for a specific ticker, typically representing an indicator like RSI."""
 
     ticker: str = Field(description=_DESCRIPTIONS["ticker"])
-    data_points: list[DataPoint] = Field(default_factory=list, description=_DESCRIPTIONS["data_points"])
+    points: list[DataPoint] = Field(default_factory=list, description=_DESCRIPTIONS["data_points"])

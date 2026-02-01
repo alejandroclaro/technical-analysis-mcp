@@ -84,4 +84,4 @@ async def compute_sma(
         if isinstance(date, datetime):
             data_points.append(DataPoint(date=date, value=float(value)))
 
-    return TimeSeries(ticker=ticker, data_points=data_points)
+    return TimeSeries(ticker=ticker, points=data_points)

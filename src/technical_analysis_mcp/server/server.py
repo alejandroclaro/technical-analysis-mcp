@@ -28,7 +28,7 @@ server = FastMCP(
 
 
 @server.tool(structured_output=True)
-async def get_ticker_information(ticker: str) -> TickerInformation | Error:
+async def ticker_information(ticker: str) -> TickerInformation | Error:
     """Get the ticker information.
 
     Retrieves detailed financial, metadata, and real-time descriptive
@@ -54,7 +54,7 @@ async def get_ticker_information(ticker: str) -> TickerInformation | Error:
 
 
 @server.tool(structured_output=True)
-async def get_asset_price_history(
+async def asset_price_history(
     ticker: str,
     period: Period,
     interval: Interval,
@@ -92,7 +92,7 @@ async def get_asset_price_history(
 
 
 @server.tool(structured_output=True)
-async def get_sma(
+async def sma(
     ticker: str,
     period: Period,
     interval: Interval,
@@ -130,7 +130,7 @@ async def get_sma(
 
 
 @server.tool(structured_output=True)
-async def get_rsi(
+async def rsi(
     ticker: str,
     period: Period,
     interval: Interval,

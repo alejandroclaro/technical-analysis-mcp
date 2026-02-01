@@ -6,7 +6,10 @@ import json
 import sys
 
 from fastmcp.client import Client
+from pydantic import TypeAdapter
 
+from technical_analysis_mcp.helpers import open_image, plot_time_series, write_to_temporal_file
+from technical_analysis_mcp.models import Error, TimeSeries
 from technical_analysis_mcp.server import server
 
 
@@ -150,7 +153,7 @@ class Repl(cmd.Cmd):
 
         """
         if not line:
-            sys.stdout.write("Usage: tool <tool_name>\n")
+            sys.stdout.write("Usage: tool_description <tool_name>\n")
             return
 
         asyncio.run(self._get_tool_info(line))
@@ -163,25 +166,53 @@ class Repl(cmd.Cmd):
 
         Args:
             line: Command line argument containing tool name and JSON arguments.
-                Format: "<tool_name> <json_args>"
+                  Format: "<tool_name> <json_args>"
 
         Raises:
             json.JSONDecodeError: If the provided arguments are not valid JSON.
 
         """
         if not line:
-            sys.stdout.write("Usage: call <tool_name> <args>\n")
+            sys.stdout.write("Usage: call_tool <tool_name> <args>\n")
             return
 
         parts = line.split()
 
         if len(parts) < 1:
-            sys.stdout.write("Usage: call <tool_name> <args>\n")
+            sys.stdout.write("Usage: call_tool <tool_name> <args>\n")
             return
 
         tool_name = parts[0]
         tool_args = " ".join(parts[1:])
         asyncio.run(self._call_tool(tool_name, tool_args))
+
+    def do_plot_tool(self, line: str) -> None:
+        """Call a tool and plot the results.
+
+        Executes a specific tool with the provided arguments and displays
+        the result.
+
+        Args:
+            line: Command line argument containing tool name and JSON arguments.
+                  Format: "<tool_name> <json_args>"
+
+        Raises:
+            json.JSONDecodeError: If the provided arguments are not valid JSON.
+
+        """
+        if not line:
+            sys.stdout.write("Usage: plot_tool <tool_name> <args>\n")
+            return
+
+        parts = line.split()
+
+        if len(parts) < 1:
+            sys.stdout.write("Usage: plot_tool <tool_name> <args>\n")
+            return
+
+        tool_name = parts[0]
+        tool_args = " ".join(parts[1:])
+        asyncio.run(self._plot_tool(tool_name, tool_args))
 
     async def _get_instructions(self) -> None:
         """Get the MCP server instructions.
@@ -247,14 +278,11 @@ class Repl(cmd.Cmd):
             sys.stdout.write("\n")
 
     async def _call_tool(self, tool_name: str, tool_args: str) -> None:
-        """Call a tool with arguments.
-
-        Executes a specific tool with the provided JSON arguments and
-        displays the result.
+        """Call a MCP tool.
 
         Args:
             tool_name: The name of the tool to call.
-            tool_args: JSON string containing the tool arguments.
+            tool_args: The JSON string containing the tool arguments.
 
         Raises:
             json.JSONDecodeError: If the provided arguments are not valid JSON.
@@ -266,11 +294,46 @@ class Repl(cmd.Cmd):
             result = await self.client.call_tool(tool_name, args_dict)
 
             if result.structured_content is not None:
-                sys.stdout.write(json.dumps(result.structured_content))
+                output = json.dumps(result.structured_content, indent=2, ensure_ascii=False)
+                file = write_to_temporal_file(output, extension="json")
+                sys.stdout.write(output)
+                sys.stdout.write(f"\nWritten to: {file}")
             else:
                 for c in result.content:
                     if c.type == "text":
                         sys.stdout.write(c.text)
+
+            sys.stdout.write("\n")
+
+    async def _plot_tool(self, tool_name: str, tool_args: str) -> None:
+        """Plot the result of calling a tool.
+
+        Args:
+            tool_name: The name of the tool to call.
+            tool_args: The JSON string containing the tool arguments.
+
+        Raises:
+            json.JSONDecodeError: If the provided arguments are not valid JSON.
+
+        """
+        async with self.client:
+            args_dict = json.loads(tool_args)
+
+            result = await self.client.call_tool(tool_name, args_dict)
+
+            adapter = TypeAdapter(TimeSeries | Error)
+
+            if result.structured_content:
+                content = adapter.validate_python(result.structured_content["result"])
+            else:
+                content = Error(what="The response does not have the structured_content.")
+
+            if isinstance(content, TimeSeries):
+                path = plot_time_series([content], tool_name)
+                sys.stdout.write(f"Image file; {path}\n")
+                open_image(path)
+            else:
+                sys.stdout.write(content.what)
 
             sys.stdout.write("\n")
 

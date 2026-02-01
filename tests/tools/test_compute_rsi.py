@@ -124,7 +124,7 @@ async def test_should_compute_rsi_when_valid_ticker_given() -> None:
     time_series = cast("TimeSeries", result)
 
     assert_that(time_series.ticker, equal_to("AAPL"))
-    assert_that(time_series.data_points, has_length(greater_than(0)))
+    assert_that(time_series.points, has_length(greater_than(0)))
 
-    for data_point in time_series.data_points:
+    for data_point in time_series.points:
         assert_that(data_point.value, all_of(greater_than_or_equal_to(0), less_than_or_equal_to(100)))

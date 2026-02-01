@@ -90,10 +90,10 @@ The following tools are available in this MCP server:
 <!-- pyml disable md013 -->
 | Tool Name | Description |
 | :-------- | :---------- |
-| `get_ticker_information` | Retrieves detailed financial, metadata, and real-time descriptive information for a specific financial instrument or company. |
-| `get_asset_price_history` | Fetches comprehensive historical pricing information including OHLC prices, volume, dividends, and stock splits. |
-| `get_sma` | Computes the Simple Moving Average (SMA) technical indicator for trend analysis and support/resistance levels. |
-| `get_rsi` | Computes the Relative Strength Index (RSI) momentum oscillator for identifying overbought/oversold conditions. |
+| `ticker_information` | Retrieves detailed financial, metadata, and real-time descriptive information for a specific financial instrument or company. |
+| `asset_price_history` | Fetches comprehensive historical pricing information including OHLC prices, volume, dividends, and stock splits. |
+| `sma` | Computes the Simple Moving Average (SMA) technical indicator for trend analysis and support/resistance levels. |
+| `rsi` | Computes the Relative Strength Index (RSI) momentum oscillator for identifying overbought/oversold conditions. |
 <!-- pyml enable md013 -->
 <!-- markdownlint-enable MD013 -->
 
@@ -125,12 +125,12 @@ Once started, you'll see a prompt: `mcp>`
 
 ```bash
 mcp> list_tools
-- get_ticker_information
-- get_asset_price_history
-- get_sma
-- get_rsi
+- ticker_information
+- asset_price_history
+- sma
+- rsi
 
-mcp> call_tool get_ticker_information '{"ticker": "AAPL"}'
+mcp> call_tool ticker_information '{"ticker": "AAPL"}'
 {"symbol": "AAPL", "name": "Apple Inc.", ...}
 ```
 
@@ -139,7 +139,7 @@ mcp> call_tool get_ticker_information '{"ticker": "AAPL"}'
 - Core data fetching tools:
   - [X] Ticker information retrieval (company details, sector, market cap, etc.)
   - [X] Historical price data (OHLC, volume, dividends, splits)
-- Trend indicators**
+- Trend indicators
   - [X] SMA (Simple Moving Average)
   - [ ] EMA (Exponential Moving Average)
   - [ ] WMA (Weighted Moving Average)
