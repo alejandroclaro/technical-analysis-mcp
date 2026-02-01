@@ -11,9 +11,10 @@ from technical_analysis_mcp.models import (
     Error,
     Interval,
     Period,
+    Price,
     PriceSource,
     TimeSeries,
-    get_price_series,
+    convert_prices_to_panda_series,
 )
 
 from .fetch_asset_price_history import fetch_asset_price_history
@@ -23,7 +24,7 @@ def compute_rsi_from_time_series(
     series: pd.Series,
     window: int,
 ) -> pd.Series:
-    """Compute RSI values using pandas Series.
+    """Compute RSI values using pandas.
 
     Args:
         series: The pandas series with price values and datetime index.
@@ -59,9 +60,30 @@ def compute_rsi_from_time_series(
     return rsi.iloc[window:]
 
 
+def compute_rsi_from_prices(
+    prices: list[Price],
+    window: int = 20,
+    source: PriceSource = "close",
+) -> pd.Series:
+    """Compute RSI values using pandas.
+
+    Args:
+        prices: The list of prices.
+        window: The moving window period.
+        source: The price source to use.
+
+    Returns:
+        The pandas Series of SMA values.
+
+    """
+    price_series = convert_prices_to_panda_series(prices, source)
+
+    return compute_rsi_from_time_series(price_series, window)
+
+
 async def compute_rsi(
     ticker: str,
-    period: Period,
+    lookback_period: Period,
     interval: Interval,
     window: int = 14,
     source: PriceSource = "close",
@@ -70,7 +92,7 @@ async def compute_rsi(
 
     Args:
         ticker: The ticker symbol (e.g., "AAPL").
-        period: The time period for which to fetch historical data.
+        lookback_period: The time period for which to fetch historical data.
         interval: The interval between data points.
         window: The number of candles/samples to calculate RSI (default 14).
         source: The price source to use.
@@ -81,7 +103,7 @@ async def compute_rsi(
     if window <= 0:
         return Error(what=f"The RSI window must be positive, got: {window}")
 
-    history = await fetch_asset_price_history(ticker, period, interval)
+    history = await fetch_asset_price_history(ticker, lookback_period, interval)
 
     if isinstance(history, Error):
         return history
@@ -94,8 +116,7 @@ async def compute_rsi(
             f"Try a) increasing the period, b) reducing the interval, c) or reducing the number of RSI candles."
         )
 
-    price_series = get_price_series(history, source)
-    rsi_series = compute_rsi_from_time_series(price_series, window)
+    rsi_series = compute_rsi_from_prices(history.prices, window, source)
 
     data_points = []
     for date, value in rsi_series.items():

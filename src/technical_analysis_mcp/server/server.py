@@ -56,7 +56,7 @@ async def ticker_information(ticker: str) -> TickerInformation | Error:
 @server.tool(structured_output=True)
 async def asset_price_history(
     ticker: str,
-    period: Period,
+    lookback_period: Period,
     interval: Interval,
 ) -> AssetPriceHistory | Error:
     """Get the historical price data for a financial asset.
@@ -79,7 +79,7 @@ async def asset_price_history(
                       Supports stock symbols (e.g., "AAPL", "TSLA"),
                       indices (e.g., "^GSPC"), and cryptocurrency
                       pairs (e.g., "BTC/USD" or "ETH-USD").
-        period (str): The time range for historical data retrieval.
+        lookback_period (str): The time range for historical data retrieval.
         interval (str): The frequency of data points.
 
     Returns:
@@ -88,13 +88,13 @@ async def asset_price_history(
         or parameters are invalid.
 
     """
-    return await fetch_asset_price_history(ticker, period, interval)
+    return await fetch_asset_price_history(ticker, lookback_period, interval)
 
 
 @server.tool(structured_output=True)
 async def sma(
     ticker: str,
-    period: Period,
+    lookback_period: Period,
     interval: Interval,
     window: int = 20,
     source: PriceSource = "close",
@@ -112,7 +112,7 @@ async def sma(
 
     Args:
         ticker (str): The unique identifier for the asset.
-        period (str): The time range for historical data retrieval.
+        lookback_period (str): The time range for historical data retrieval.
         interval (str): The frequency of data points.
         window (int): The moving window period for SMA calculation.
                       Default is 20 periods.
@@ -126,13 +126,13 @@ async def sma(
         are invalid.
 
     """
-    return await compute_sma(ticker, period, interval, window, source)
+    return await compute_sma(ticker, lookback_period, interval, window, source)
 
 
 @server.tool(structured_output=True)
 async def rsi(
     ticker: str,
-    period: Period,
+    lookback_period: Period,
     interval: Interval,
     window: int = 14,
     source: PriceSource = "close",
@@ -150,7 +150,7 @@ async def rsi(
 
     Args:
         ticker (str): The unique identifier for the asset.
-        period (str): The time range for historical data retrieval.
+        lookback_period (str): The time range for historical data retrieval.
         interval (str): The frequency of data points.
         window (int): The number of candles/samples to use for RSI calculation.
                       Default is 14 candles.
@@ -164,7 +164,7 @@ async def rsi(
         are invalid.
 
     """
-    return await compute_rsi(ticker, period, interval, window, source)
+    return await compute_rsi(ticker, lookback_period, interval, window, source)
 
 
 def main() -> None:

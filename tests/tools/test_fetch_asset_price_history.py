@@ -42,7 +42,7 @@ async def test_given_valid_ticker_when_fetch_asset_price_history_then_returns_as
     assert_that(result, is_(instance_of(AssetPriceHistory)))
 
     if isinstance(result, AssetPriceHistory):
-        assert_that(result, has_properties(ticker=ticker, period=period, interval=interval))
+        assert_that(result, has_properties(ticker=ticker, lookback_period=period, interval=interval))
         assert_that(result.prices, is_(not_(empty())))
 
 
@@ -58,7 +58,7 @@ async def test_given_edge_case_period_when_fetch_asset_price_history_then_return
     assert_that(result, is_(instance_of(AssetPriceHistory)))
 
     if isinstance(result, AssetPriceHistory):
-        assert_that(result, has_properties(ticker=ticker, period=period, interval=interval))
+        assert_that(result, has_properties(ticker=ticker, lookback_period=period, interval=interval))
         assert_that(result.prices, is_(not_(empty())))
 
 
@@ -74,5 +74,5 @@ async def test_given_edge_case_interval_when_fetch_asset_price_history_then_retu
     assert_that(result, is_(instance_of(AssetPriceHistory)))
 
     if isinstance(result, AssetPriceHistory):
-        assert_that(result, has_properties(ticker=ticker, period=period, interval=interval))
+        assert_that(result, has_properties(ticker=ticker, lookback_period=period, interval=interval))
         assert_that(result.prices, is_(not_(empty())))

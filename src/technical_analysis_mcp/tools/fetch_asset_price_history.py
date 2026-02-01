@@ -15,14 +15,14 @@ from technical_analysis_mcp.models import (
 
 async def fetch_asset_price_history(
     ticker: str,
-    period: Period,
+    lookback_period: Period,
     interval: Interval,
 ) -> AssetPriceHistory | Error:
     """Fetch asset price history for a given ticker symbol.
 
     Args:
         ticker: The ticker symbol of the stock to get historical prices for, e.g., "AAPL".
-        period: The time period for which to fetch historical data.
+        lookback_period: The time period for which to fetch historical data.
         interval: The interval between data points.
 
     Returns:
@@ -31,7 +31,7 @@ async def fetch_asset_price_history(
     """
     try:
         information = yf.Ticker(ticker)
-        data = information.history(period=period, interval=interval)
+        data = information.history(period=lookback_period, interval=interval)
         prices = []
 
         if data.empty:
@@ -51,6 +51,6 @@ async def fetch_asset_price_history(
 
             prices.append(price)
 
-        return AssetPriceHistory(ticker=ticker, period=period, interval=interval, prices=prices)
+        return AssetPriceHistory(ticker=ticker, lookback_period=lookback_period, interval=interval, prices=prices)
     except (ValueError, TypeError, KeyError) as e:
         return Error(what=f"Error fetching historical data for ticker {ticker}: {e}")

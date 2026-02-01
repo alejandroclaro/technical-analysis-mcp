@@ -9,6 +9,7 @@ from hamcrest import (
     all_of,
     assert_that,
     close_to,
+    empty,
     equal_to,
     greater_than,
     greater_than_or_equal_to,
@@ -16,13 +17,14 @@ from hamcrest import (
     instance_of,
     is_,
     less_than_or_equal_to,
+    not_,
 )
 
-from technical_analysis_mcp.models import TimeSeries
+from technical_analysis_mcp.models import Error, TimeSeries
 from technical_analysis_mcp.tools.compute_rsi import compute_rsi, compute_rsi_from_time_series
 
 
-def test_should_compute_rsi_from_time_series_when_valid_data_given() -> None:
+def test_given_series_when_compute_rsi_then_returns_right_rsi_computation() -> None:
     """Test computing RSI values from time series with valid data using pandas."""
     dates = [
         datetime(2024, 1, 1, tzinfo=UTC),
@@ -72,7 +74,7 @@ def test_should_compute_rsi_from_time_series_when_valid_data_given() -> None:
         assert_that(value, close_to(50, 50))
 
 
-def test_should_return_empty_series_when_insufficient_data_given() -> None:
+def test_given_insufficient_data_when_compute_rsi_then_returns_empty_series() -> None:
     """Test computing RSI values with insufficient data."""
     dates = [
         datetime(2024, 1, 1, tzinfo=UTC),
@@ -91,7 +93,7 @@ def test_should_return_empty_series_when_insufficient_data_given() -> None:
     assert_that(result, has_length(0))
 
 
-def test_should_return_empty_series_when_zero_or_negative_window_given() -> None:
+def test_given_invalid_window_when_compute_rsi_then_returns_empty_series() -> None:
     """Test computing RSI values with zero or negative window."""
     dates = [
         datetime(2024, 1, 1, tzinfo=UTC),
@@ -110,11 +112,11 @@ def test_should_return_empty_series_when_zero_or_negative_window_given() -> None
 
 
 @pytest.mark.asyncio
-async def test_should_compute_rsi_when_valid_ticker_given() -> None:
+async def test_given_right_input_when_compute_rsi_then_returns_right_rsi_calculation() -> None:
     """Test computing RSI with valid ticker."""
     result = await compute_rsi(
         ticker="AAPL",
-        period="1mo",
+        lookback_period="1mo",
         interval="1d",
         window=14,
         source="close",
@@ -128,3 +130,48 @@ async def test_should_compute_rsi_when_valid_ticker_given() -> None:
 
     for data_point in time_series.points:
         assert_that(data_point.value, all_of(greater_than_or_equal_to(0), less_than_or_equal_to(100)))
+
+
+@pytest.mark.asyncio
+async def test_given_large_window_when_compute_rsi_then_return_error() -> None:
+    """Test error when window is too large."""
+    result = await compute_rsi(
+        ticker="AAPL",
+        lookback_period="1mo",
+        interval="1d",
+        window=100,
+        source="close",
+    )
+
+    assert_that(result, is_(instance_of(Error)))
+
+    if isinstance(result, Error):
+        assert_that(result.what, not_(empty()))
+
+
+@pytest.mark.asyncio
+async def test_given_negative_window_when_compute_rsi_then_returns_error() -> None:
+    """Test computing RSI with negative window."""
+    result = await compute_rsi(
+        ticker="AAPL",
+        lookback_period="1mo",
+        interval="1d",
+        window=-5,
+        source="close",
+    )
+
+    assert_that(result, instance_of(Error))
+
+
+@pytest.mark.asyncio
+async def test_given_zero_window_when_compute_rsi_then_returns_error() -> None:
+    """Test computing RSI with zero window."""
+    result = await compute_rsi(
+        ticker="AAPL",
+        lookback_period="1mo",
+        interval="1d",
+        window=0,
+        source="close",
+    )
+
+    assert_that(result, instance_of(Error))

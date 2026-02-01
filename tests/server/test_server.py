@@ -95,7 +95,7 @@ async def test_given_invalid_ticker_when_call_ticker_information_then_returns_er
 async def test_given_valid_parameters_when_call_asset_price_history_then_returns_price_data() -> None:
     """Test the asset_price_history tool with valid parameters."""
     async with Client(server) as client:
-        params = {"ticker": "AAPL", "period": "1mo", "interval": "1d"}
+        params = {"ticker": "AAPL", "lookback_period": "1mo", "interval": "1d"}
         result = await client.call_tool("asset_price_history", params)
         assert_that(result.structured_content, is_(not_none()))
 
@@ -104,7 +104,7 @@ async def test_given_valid_parameters_when_call_asset_price_history_then_returns
 
         result_data = structured_content["result"]
         assert_that(result_data["ticker"], equal_to("AAPL"))
-        assert_that(result_data["period"], equal_to("1mo"))
+        assert_that(result_data["lookback_period"], equal_to("1mo"))
         assert_that(result_data["interval"], equal_to("1d"))
         assert_that(result_data, has_key("prices"))
 
@@ -113,7 +113,7 @@ async def test_given_valid_parameters_when_call_asset_price_history_then_returns
 async def test_given_invalid_ticker_when_call_asset_price_history_then_returns_error() -> None:
     """Test the asset_price_history tool with invalid ticker."""
     async with Client(server) as client:
-        params = {"ticker": "INVALID_TICKER", "period": "1mo", "interval": "1d"}
+        params = {"ticker": "INVALID_TICKER", "lookback_period": "1mo", "interval": "1d"}
         result = await client.call_tool("asset_price_history", params)
         assert_that(result.structured_content, is_(not_none()))
 
@@ -130,10 +130,10 @@ async def test_given_valid_parameters_when_call_sma_then_returns_sma_data() -> N
     async with Client(server) as client:
         params = {
             "ticker": "AAPL",
-            "source": "close",
-            "period": "1mo",
+            "lookback_period": "1mo",
             "interval": "1d",
             "window": 20,
+            "source": "close",
         }
 
         result = await client.call_tool("sma", params)
@@ -152,10 +152,10 @@ async def test_given_invalid_window_when_call_sma_then_returns_error() -> None:
     async with Client(server) as client:
         params = {
             "ticker": "AAPL",
-            "source": "close",
-            "period": "1mo",
+            "lookback_period": "1mo",
             "interval": "1d",
             "window": 0,  # Invalid: must be positive
+            "source": "close",
         }
 
         result = await client.call_tool("sma", params)
@@ -174,10 +174,10 @@ async def test_given_valid_parameters_when_call_rsi_then_returns_rsi_data() -> N
     async with Client(server) as client:
         params = {
             "ticker": "AAPL",
-            "source": "close",
-            "period": "1mo",
+            "lookback_period": "1mo",
             "interval": "1d",
             "window": 14,
+            "source": "close",
         }
 
         result = await client.call_tool("rsi", params)
@@ -197,10 +197,10 @@ async def test_given_invalid_ticker_when_call_rsi_then_returns_error() -> None:
     async with Client(server) as client:
         params = {
             "ticker": "INVALID_TICKER",
-            "source": "close",
-            "period": "1mo",
+            "lookback_period": "1mo",
             "interval": "1d",
             "window": 14,
+            "source": "close",
         }
 
         result = await client.call_tool("rsi", params)
@@ -219,10 +219,10 @@ async def test_given_invalid_period_when_call_rsi_then_returns_error() -> None:
     async with Client(server) as client:
         params = {
             "ticker": "AAPL",
-            "source": "close",
-            "period": "invalid_period",
+            "lookback_period": "invalid_period",
             "interval": "1d",
             "window": 14,
+            "source": "close",
         }
 
         with pytest.raises(ToolError):
@@ -235,10 +235,10 @@ async def test_given_invalid_interval_when_call_rsi_then_returns_error() -> None
     async with Client(server) as client:
         params = {
             "ticker": "AAPL",
-            "source": "close",
-            "period": "1mo",
+            "lookback_period": "1mo",
             "interval": "invalid_interval",
             "window": 14,
+            "source": "close",
         }
 
         with pytest.raises(ToolError):
@@ -251,10 +251,10 @@ async def test_given_invalid_window_when_call_rsi_then_returns_error() -> None:
     async with Client(server) as client:
         params = {
             "ticker": "AAPL",
-            "source": "close",
-            "period": "1mo",
+            "lookback_period": "1mo",
             "interval": "1d",
             "window": 0,  # Invalid: must be positive
+            "source": "close",
         }
 
         result = await client.call_tool("rsi", params)
